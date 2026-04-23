@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projet R&D Sauvegarde — Luigi Denis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #111; --mid: #555; --muted: #999; --rule: #e4e4e4;
+    --bg: #f7f7f5; --accent: #1a1aff; --sans: 'DM Sans', sans-serif; --mono: 'IBM Plex Mono', monospace;
+  }
+  body { font-family: var(--sans); background: white; color: var(--ink); max-width: 680px; margin: 0 auto; padding: 40px 24px 80px; }
+  .back { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; color: var(--muted); text-decoration: none; margin-bottom: 48px; }
+  .tag.formation { border: none; background: none; padding: 0; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; color: var(--muted); text-transform: uppercase; display: flex; align-items: center; gap: 7px; margin-bottom: 10px; }
+  .tag.formation::before { content: ''; display: inline-block; width: 18px; height: 1px; background: var(--muted); }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; padding: 3px 9px; border: 1px solid var(--rule); color: var(--muted); }
+  .tag.hi { border-color: var(--accent); color: var(--accent); background: #f0f0ff; }
+  h1 { font-size: clamp(22px, 4vw, 32px); font-weight: 300; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .sub { font-size: 14px; color: var(--muted); font-weight: 300; margin-bottom: 32px; }
+  hr { border: none; border-top: 1px solid var(--rule); margin-bottom: 32px; }
+  .label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+  .block { margin-bottom: 40px; }
+  .context { border-left: 2px solid var(--accent); padding: 14px 16px; background: var(--bg); font-size: 14px; color: var(--mid); line-height: 1.7; font-weight: 300; }
+  .action { display: flex; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+  .num { font-family: var(--mono); font-size: 20px; color: var(--rule); min-width: 32px; padding-top: 2px; }
+  .action h3 { font-size: 14px; font-weight: 500; margin-bottom: 5px; }
+  .action p  { font-size: 13px; color: var(--mid); line-height: 1.65; font-weight: 300; }
+  .livrable { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--rule); gap: 12px; }
+  .livrable span { font-size: 13px; color: var(--mid); }
+  .livrable a { font-family: var(--mono); font-size: 11px; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 5px 12px; }
+  footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--rule); font-family: var(--mono); font-size: 10px; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back">← Projets</a>
+
+<span class="tag formation">Administrateur Systèmes Réseaux &amp; Sécurité</span>
+
+<div class="tags">
+  <span class="tag hi">Bash Scripting</span>
+  <span class="tag">Rsync</span>
+  <span class="tag">SSH (Clés RSA)</span>
+  <span class="tag">Crontab</span>
+  <span class="tag">Virtualisation</span>
+</div>
+
+<h1>Sauvegarde centralisée rsync &amp; SSH</h1>
+<p class="sub">Projet de R&amp;D : Mise en place d'une stratégie de sauvegarde pour environnement virtualisé</p>
+<hr>
+
+<div class="block">
+  <p class="label">Contexte &amp; Enjeux</p>
+  <div class="context">
+    La mairie de Mareuil-sur-Oise a généralisé l'usage de la virtualisation pour ses services internes et publics. Cependant, le logiciel de sauvegarde actuel est devenu incompatible avec ces technologies. Ce projet de R&amp;D a pour objectif de concevoir une stratégie de sauvegarde basée sur l'outil libre <strong>rsync</strong>.
+    <br><br>
+    L'enjeu principal est de garantir la <strong>continuité de service</strong> via une double approche : la sauvegarde granulaire des données applicatives et la sauvegarde différentielle des machines virtuelles. La solution doit assurer une sécurité totale des flux via SSH et permettre une restauration rapide des versions n-1 pour répondre aux incidents utilisateurs.
+  </div>
+</div>
+
+<div class="block">
+  <p class="label">Actions techniques menées</p>
+
+  <div class="action">
+    <div class="num">01</div>
+    <div>
+      <h3>Double Stratégie de Sauvegarde</h3>
+      <p>Mise en œuvre de sauvegardes incrémentales pour les données critiques (RH, Mails, Site web) et de sauvegardes différentielles pour les images disques VM, respectant les contraintes de bande passante de la mairie.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="num">02</div>
+    <div>
+      <h3>Automatisation par Clés Asymétriques</h3>
+      <p>Configuration de tunnels SSH avec authentification par <strong>clés RSA</strong> pour permettre des sauvegardes silencieuses et sécurisées, sans saisie de mot de passe, via le planificateur de tâches <strong>cron</strong>.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="num">03</div>
+    <div>
+      <h3>Gestion de la Rétention (Versions N-1)</h3>
+      <p>Développement de scripts Bash gérant la rotation des données (LIVE/OLD). Cette structure permet de conserver systématiquement la version de la veille pour chaque service, conformément aux prérequis du DSI.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="num">04</div>
+    <div>
+      <h3>Script de Restauration Interactif</h3>
+      <p>Création d'un outil en ligne de commande permettant de simuler un ticket utilisateur et d'exécuter une restauration manuelle. Le script offre un menu de sélection des sources et une visualisation de l'arborescence avant validation.</p>
+    </div>
+  </div>
+</div>
+
+<div class="block">
+  <p class="label">Livrables techniques</p>
+  <div class="livrable"><span>01. Scripts de sauvegarde automatisée (.sh)</span><a href="#">Consulter</a></div>
+  <div class="livrable"><span>02. Script de restauration interactive (restauration.sh)</span><a href="#">Consulter</a></div>
+  <div class="livrable"><span>03. Fichiers de traces rsync (.log)</span><a href="#">Voir les logs</a></div>
+  <div class="livrable"><span>04. Configuration Crontab</span><a href="#">Ouvrir</a></div>
+</div>
+
+<footer>Luigi Denis · Portfolio professionnel · 2024</footer>
+
+</body>
+</html>

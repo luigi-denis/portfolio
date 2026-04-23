@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déploiement d'un site web sécurisé — Rainbow Bank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  /* Reset & Base */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #111;
+    --mid: #555;
+    --muted: #999;
+    --rule: #e4e4e4;
+    --bg: #f7f7f5;
+    --accent: #1a1aff;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  body {
+    font-family: var(--sans);
+    background: white;
+    color: var(--ink);
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* Navigation */
+  .back {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--muted); text-decoration: none;
+    margin-bottom: 48px;
+  }
+  .back:hover { color: var(--ink); }
+
+  /* Tags */
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .tag {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+    padding: 3px 9px; border: 1px solid var(--rule); color: var(--muted);
+  }
+  .tag.hi { border-color: var(--accent); color: var(--accent); background: #f0f0ff; }
+  .tag.formation {
+    border: none; background: none; padding: 0;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+    color: var(--muted); text-transform: uppercase;
+    display: flex; align-items: center; gap: 7px;
+    margin-bottom: 10px;
+  }
+  .tag.formation::before { content: ''; display: inline-block; width: 18px; height: 1px; background: var(--muted); }
+
+  /* Titres */
+  h1 { font-size: clamp(22px, 4vw, 32px); font-weight: 300; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .sub { font-size: 14px; color: var(--muted); font-weight: 300; margin-bottom: 32px; }
+  hr { border: none; border-top: 1px solid var(--rule); margin-bottom: 32px; }
+
+  /* Sections */
+  .label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+  .block { margin-bottom: 40px; }
+  .context { border-left: 2px solid var(--accent); padding: 14px 16px; background: var(--bg); font-size: 14px; color: var(--mid); line-height: 1.7; font-weight: 300; }
+
+  /* Actions Techniques */
+  .action { display: flex; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+  .action:first-child { border-top: 1px solid var(--rule); }
+  .num { font-family: var(--mono); font-size: 20px; color: var(--rule); min-width: 32px; padding-top: 2px; }
+  .action h3 { font-size: 14px; font-weight: 500; margin-bottom: 5px; }
+  .action p { font-size: 13px; color: var(--mid); line-height: 1.65; font-weight: 300; }
+
+  /* Livrables */
+  .livrable { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--rule); gap: 12px; }
+  .livrable:first-child { border-top: 1px solid var(--rule); }
+  .livrable span { font-size: 13px; color: var(--mid); }
+  .livrable a { font-family: var(--mono); font-size: 11px; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 5px 12px; white-space: nowrap; flex-shrink: 0; }
+  .livrable a:hover { background: var(--accent); color: white; }
+
+  footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--rule); font-family: var(--mono); font-size: 10px; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back">← Portfolio</a>
+
+<span class="tag formation">Administrateur Systèmes Réseaux &amp; Sécurité</span>
+<div class="tags">
+  <span class="tag hi">Hardening Linux</span>
+  <span class="tag">Fail2Ban</span>
+  <span class="tag">FTP/FTPS</span>
+  <span class="tag">Chiffrement SSL/TLS</span>
+</div>
+
+<h1>Déploiement d'un site web sécurisé — Rainbow Bank</h1>
+<p class="sub">Prototype sécurisé multi-services sur environnement Linux durci</p>
+<hr>
+
+<div class="block">
+  <p class="label">Contexte &amp; Enjeux</p>
+  <div class="context">
+    Dans le cadre du projet EXTRANET pour la banque internationale <strong>Rainbow Bank</strong>, j'ai été chargé de concevoir un prototype de serveur web sécurisé. L'objectif était d'héberger deux services web distincts (Extranet et Administration) ainsi qu'un <strong>service FTP sécurisé</strong> sur une même machine virtuelle Linux (Debian). Le projet visait à intégrer des protections contre les attaques type DDoS, slow connections et les tentatives d'intrusion, tout en assurant une gestion des accès pour les équipes techniques (développeurs et graphistes).
+  </div>
+</div>
+
+<div class="block">
+  <p class="label">Actions techniques menées</p>
+
+  <div class="action">
+    <div class="num">01</div>
+    <div>
+      <h3>Étude comparative et déploiement Web sécurisé</h3>
+      <p>Analyse comparative des performances et de la sécurité entre <strong>Apache</strong> et <strong>NGINX</strong> pour valider la solution cible. Configuration des Virtual Hosts avec redirection <strong>HTTPS systématique</strong> et isolation du service Administration sur des ports non-conventionnels.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="num">02</div>
+    <div>
+      <h3>Service FTP Sécurisé</h3>
+      <p>Configuration de <strong>vsftpd</strong> avec obligation de chiffrement TLS pour les données et le login. Mise en place d'un <strong>cloisonnement chroot</strong> strict pour les utilisateurs nominatifs afin d'interdire toute navigation hors de l'arborescence du service web.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="num">03</div>
+    <div>
+      <h3>Mise en place Netfilter et Fail2ban</h3>
+      <p>Mise en place de règles de filtrages strictes (<strong>Default DROP</strong>). Configuration de règles <strong>iptables</strong> différenciées : accès multi-services sur l'interface externe (ens34) et filtrage granulaire sur la patte interne. Intégration de <strong>Fail2Ban</strong> pour le bannissement automatique (5 min) après 3 échecs d'authentification FTP.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="num">04</div>
+    <div>
+      <h3>Protection Anti-DoS &amp; Slow Connections</h3>
+      <p>Durcissement du serveur <strong>Apache</strong> via <strong>mod_evasive</strong> pour limiter les requêtes par IP et <strong>mod_reqtimeout</strong> pour contrer les attaques de type "slowloris" en fixant des seuils minimaux de réception des headers et du body.</p>
+    </div>
+  </div>
+</div>
+
+<div class="block">
+  <p class="label">Livrables techniques</p>
+
+  <div class="livrable">
+    <span>01. Fichiers de configuration Web (Vhosts Apache/Nginx)</span>
+    <a href="#">Consulter .txt</a>
+  </div>
+  <div class="livrable">
+    <span>02. Configuration du service sécurisé vsftpd (FTPS)</span>
+    <a href="#">Consulter .txt</a>
+  </div>
+  <div class="livrable">
+    <span>03. Script de règles Netfilter (iptables-save)</span>
+    <a href="#">Consulter .txt</a>
+  </div>
+  <div class="livrable">
+    <span>04. Jails et filtres Fail2Ban (vsftpd)</span>
+    <a href="#">Consulter .txt</a>
+  </div>
+</div>
+
+<footer>Luigi Denis · Portfolio professionnel · 2024</footer>
+
+</body>
+</html>

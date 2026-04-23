@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Architecture Réseau Multi-site — CyberConseil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #111;
+    --mid: #555;
+    --muted: #999;
+    --rule: #e4e4e4;
+    --bg: #f7f7f5;
+    --accent: #1a1aff;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: white;
+    color: var(--ink);
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .back {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--muted); text-decoration: none;
+    margin-bottom: 48px;
+  }
+  .back:hover { color: var(--ink); }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .tag {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+    padding: 3px 9px; border: 1px solid var(--rule); color: var(--muted);
+  }
+  .tag.hi { border-color: var(--accent); color: var(--accent); background: #f0f0ff; }
+  .tag.formation {
+    border: none; background: none; padding: 0;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+    color: var(--muted); text-transform: uppercase;
+    display: flex; align-items: center; gap: 7px;
+    margin-bottom: 10px;
+  }
+  .tag.formation::before {
+    content: '';
+    display: inline-block; width: 18px; height: 1px;
+    background: var(--muted);
+  }
+
+  h1 {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 300; line-height: 1.2;
+    letter-spacing: -0.02em; margin-bottom: 8px;
+  }
+  .sub { font-size: 14px; color: var(--muted); font-weight: 300; margin-bottom: 32px; }
+
+  hr { border: none; border-top: 1px solid var(--rule); margin-bottom: 32px; }
+
+  .label {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+
+  .block { margin-bottom: 40px; }
+
+  .context {
+    border-left: 2px solid var(--accent);
+    padding: 14px 16px;
+    background: var(--bg);
+    font-size: 14px; color: var(--mid);
+    line-height: 1.7; font-weight: 300;
+  }
+
+  .action { display: flex; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+  .action:first-child { border-top: 1px solid var(--rule); }
+  .num { font-family: var(--mono); font-size: 20px; color: var(--rule); min-width: 32px; padding-top: 2px; }
+  .action h3 { font-size: 14px; font-weight: 500; margin-bottom: 5px; }
+  .action p  { font-size: 13px; color: var(--mid); line-height: 1.65; font-weight: 300; }
+
+  .livrable {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0; border-bottom: 1px solid var(--rule); gap: 12px;
+  }
+  .livrable:first-child { border-top: 1px solid var(--rule); }
+  .livrable span { font-size: 13px; color: var(--mid); }
+  .livrable a {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    text-decoration: none; border: 1px solid var(--accent);
+    padding: 5px 12px; white-space: nowrap; flex-shrink: 0;
+  }
+  .livrable a:hover { background: var(--accent); color: white; }
+
+  footer {
+    margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--rule);
+    font-family: var(--mono); font-size: 10px; color: var(--muted); text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    .livrable { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back">← Portfolio</a>
+
+<span class="tag formation">Administrateur Systèmes Réseaux &amp; Sécurité</span>
+<div class="tags">
+  <span class="tag hi">Cisco Packet Tracer</span>
+  <span class="tag">OSPF</span>
+  <span class="tag">LACP / EtherChannel</span>
+  <span class="tag">NAT</span>
+  <span class="tag">ACL</span>
+  <span class="tag">IPv4/IPv6 Dual Stack</span>
+</div>
+
+<h1>Déploiement de l'infrastructure réseau de CyberConseil</h1>
+<p class="sub">Architecture multi-site, haute disponibilité et segmentation sécurisée</p>
+<hr>
+
+<div class="block">
+  <p class="label">Contexte &amp; Enjeux</p>
+  <div class="context">
+    Face à la forte croissance de <strong>CyberConseil</strong>, j'ai piloté la mise en place de l'infrastructure réseau des nouveaux locaux de l'entreprise, répartis sur un site de quatre bâtiments : Accueil, Salle Serveurs, Bureaux et Local Technique.
+    <br><br>
+    L'enjeu consistait à concevoir une infrastructure réseau intégrant l'adressage <strong>IPv4 et IPv6</strong>, la mise en place d'un routage dynamique performant (OSPF), un durcissement des accès réseau et le paramétrage de liens d'agrégations selon le cahier des charges de la DSI.
+  </div>
+</div>
+
+<div class="block">
+  <p class="label">Actions techniques menées</p>
+
+  <div class="action">
+    <div class="num">01</div>
+    <div>
+      <h3>Routage Dynamique &amp; Agrégation LACP</h3>
+      <p>Mise en œuvre d'<strong>OSPF</strong> pour l'interconnexion multi-site et paramétrage du protocole <strong>LACP</strong> pour assurer la redondance et la répartition de charge sur les switchs de distribution. Déploiement d'un plan d'adressage <strong>IPv4/IPv6</strong> avec gestion du service <strong>DHCP</strong>.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="num">02</div>
+    <div>
+      <h3>Sécurisation de la Couche Accès</h3>
+      <p><strong>Désactivation des ports inutilisés</strong> sur l'ensemble des équipements et activation du <strong>Port Security avec le mode sticky</strong> (filtrage MAC dynamique). Cette approche garantit le contrôle strict des équipements connectés au LAN.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="num">03</div>
+    <div>
+      <h3>NAT, ACL &amp; Hardening des équipements</h3>
+      <p>Configuration du <strong>NAT</strong> pour la translation des flux vers l'extérieur, suivie du déploiement d'<strong>ACL</strong> pour le filtrage et l'isolation des segments réseau. Sécurisation des équipements par le <strong>chiffrement des mots de passe</strong> (Secret et Service Password-Encryption) et restriction des lignes VTY.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="num">04</div>
+    <div>
+      <h3>Tests et validation de la maquette</h3>
+      <p>Analyse du trafic pour vérifier le fonctionnement des <strong>ACL</strong>, du <strong>NAT</strong>, du <strong>load balancing</strong>, des tables de routages et des entrées <strong>DNS</strong> pour validation de la maquette et enregistrement des fichiers de configurations des équipements.</p>
+    </div>
+  </div>
+</div>
+
+<div class="block">
+  <p class="label">Livrables du projet</p>
+
+  <div class="livrable">
+    <span>01. Plan d'adressage IPv4/IPv6 &amp; Table de routage</span>
+    <a href="#" target="_blank">Consulter</a>
+  </div>
+  <div class="livrable">
+    <span>02. Dossier de configuration (OSPF, LACP, NAT, ACL)</span>
+    <a href="#" target="_blank">Voir le PDF</a>
+  </div>
+  <div class="livrable">
+    <span>03. Rapport de test et validation de maquette</span>
+    <a href="#" target="_blank">Consulter</a>
+  </div>
+</div>
+
+<footer>Luigi Denis · Portfolio professionnel · 2024</footer>
+
+</body>
+</html>

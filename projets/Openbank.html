@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interconnexion Multisite — OpenBank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #111;
+    --mid: #555;
+    --muted: #999;
+    --rule: #e4e4e4;
+    --bg: #f7f7f5;
+    --accent: #1a1aff;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: white;
+    color: var(--ink);
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .back {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--muted); text-decoration: none;
+    margin-bottom: 48px;
+  }
+  .back:hover { color: var(--ink); }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .tag {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+    padding: 3px 9px; border: 1px solid var(--rule); color: var(--muted);
+  }
+  .tag.hi { border-color: var(--accent); color: var(--accent); background: #f0f0ff; }
+  .tag.formation {
+    border: none; background: none; padding: 0;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+    color: var(--muted); text-transform: uppercase;
+    display: flex; align-items: center; gap: 7px;
+    margin-bottom: 10px;
+  }
+  .tag.formation::before {
+    content: '';
+    display: inline-block; width: 18px; height: 1px;
+    background: var(--muted);
+  }
+
+  h1 {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 300; line-height: 1.2;
+    letter-spacing: -0.02em; margin-bottom: 8px;
+  }
+  .sub { font-size: 14px; color: var(--muted); font-weight: 300; margin-bottom: 32px; }
+
+  hr { border: none; border-top: 1px solid var(--rule); margin-bottom: 32px; }
+
+  .label {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+
+  .block { margin-bottom: 40px; }
+
+  .context {
+    border-left: 2px solid var(--accent);
+    padding: 14px 16px;
+    background: var(--bg);
+    font-size: 14px; color: var(--mid);
+    line-height: 1.7; font-weight: 300;
+  }
+
+  .action { display: flex; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+  .action:first-child { border-top: 1px solid var(--rule); }
+  .num { font-family: var(--mono); font-size: 20px; color: var(--rule); min-width: 32px; padding-top: 2px; }
+  .action h3 { font-size: 14px; font-weight: 500; margin-bottom: 5px; }
+  .action p  { font-size: 13px; color: var(--mid); line-height: 1.65; font-weight: 300; }
+
+  .livrable {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0; border-bottom: 1px solid var(--rule); gap: 12px;
+  }
+  .livrable:first-child { border-top: 1px solid var(--rule); }
+  .livrable span { font-size: 13px; color: var(--mid); }
+  .livrable a {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    text-decoration: none; border: 1px solid var(--accent);
+    padding: 5px 12px; white-space: nowrap; flex-shrink: 0;
+  }
+  .livrable a:hover { background: var(--accent); color: white; }
+
+  footer {
+    margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--rule);
+    font-family: var(--mono); font-size: 10px; color: var(--muted); text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    .livrable { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back">← Portfolio</a>
+
+<span class="tag formation">Administrateur Systèmes Réseaux &amp; Sécurité</span>
+<div class="tags">
+  <span class="tag hi">Interconnexion Multisite</span>
+  <span class="tag">Active Directory</span>
+  <span class="tag">VPN pfSense</span>
+  <span class="tag">RODC</span>
+</div>
+
+<h1>Interconnexion et centralisation du SI multisite — OpenBank</h1>
+<p class="sub">OpenBank Paris &amp; Nantes — Déploiement d'une infrastructure hybride ADDS / RODC</p>
+<hr>
+
+<div class="block">
+  <p class="label">Contexte & Enjeux</p>
+  <div class="context">
+    Suite à l'acquisition de nouveaux locaux à Nantes, j'ai piloté l'extension du SI d'<strong>OpenBank</strong>. 
+    L'objectif était de permettre une administration centralisée depuis Paris tout en assurant 
+    une autonomie d'authentification pour le site distant via un contrôleur de domaine en lecture seule (RODC).
+  </div>
+</div>
+
+<div class="block">
+  <p class="label">Actions techniques menées</p>
+
+  <div class="action">
+    <div class="num">01</div>
+    <div>
+      <h3>Déploiement ADDS & Réplication RODC</h3>
+      <p>Mise en production de deux serveurs <strong>Windows Server 2019</strong>. Installation du rôle ADDS principal à Paris et configuration d'un <strong>RODC</strong> à Nantes. Cette architecture garantit la persistance des sessions utilisateurs locales même en cas d'indisponibilité du lien VPN.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="num">02</div>
+    <div>
+      <h3>Tunneling VPN Site-à-Site avec pfSense</h3>
+      <p>Interconnexion des réseaux via deux passerelles <strong>pfSense</strong>. Mise en œuvre d'un tunnel VPN sécurisé (chiffrement AES) permettant la synchronisation des données d'annuaire entre le LAN mère (10.0.1.0/24) et le LAN distant (10.0.2.0/24).</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="num">03</div>
+    <div>
+      <h3>Gouvernance par GPO & Gestion des Partages</h3>
+      <p>Structuration de l'annuaire par services (Direction, IT, Prêt immobilier). Application de stratégies de groupe (<strong>GPO</strong>) restrictives : interdiction des supports amovibles (hors IT), mappage automatique des lecteurs réseaux et restrictions des horaires de travail (20h-06h).</p>
+    </div>
+  </div>
+</div>
+
+<div class="block">
+  <p class="label">Livrables techniques</p>
+
+  <div class="livrable">
+    <span>01. Identification Windows Server 2019 (Propriétés système)</span>
+    <a href="Denis_Luigi_1_copie_ecran_PC_062023.png" target="_blank">Voir le PNG</a>
+  </div>
+  <div class="livrable">
+    <span>02. Arborescence ADDS & Gestion des comptes utilisateurs</span>
+    <a href="Denis_Luigi_2_copie_ecran_utilisateurs_062023.png" target="_blank">Voir le PNG</a>
+  </div>
+  <div class="livrable">
+    <span>03. Sécurisation du répertoire partagé SharedCompanyDocs</span>
+    <a href="Denis_Luigi_3_copie_ecran_propriete_062023.jpg" target="_blank">Voir le JPG</a>
+  </div>
+  <div class="livrable">
+    <span>04. Console de gestion des stratégies de groupe (GPO)</span>
+    <a href="Denis_Luigi_4_copie_ecran_gpo_062023.png" target="_blank">Voir le PNG</a>
+  </div>
+</div>
+
+<footer>Luigi Denis · Portfolio professionnel · 2024</footer>
+
+</body>
+</html>

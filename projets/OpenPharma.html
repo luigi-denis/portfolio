@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sécurisation SI — Open Pharma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #111;
+    --mid: #555;
+    --muted: #999;
+    --rule: #e4e4e4;
+    --bg: #f7f7f5;
+    --accent: #1a1aff;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: white;
+    color: var(--ink);
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* NAV */
+  .back {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--muted); text-decoration: none;
+    margin-bottom: 48px;
+  }
+  .back:hover { color: var(--ink); }
+
+  /* HEADER */
+  .tag.formation {
+    border: none; background: none; padding: 0;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+    color: var(--muted); text-transform: uppercase;
+    display: flex; align-items: center; gap: 7px;
+    margin-bottom: 10px;
+  }
+  .tag.formation::before {
+    content: '';
+    display: inline-block; width: 18px; height: 1px;
+    background: var(--muted);
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .tag {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+    padding: 3px 9px; border: 1px solid var(--rule); color: var(--muted);
+  }
+  .tag.hi { border-color: var(--accent); color: var(--accent); background: #f0f0ff; }
+
+  h1 {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 300; line-height: 1.2;
+    letter-spacing: -0.02em; margin-bottom: 8px;
+  }
+  .sub { font-size: 14px; color: var(--muted); font-weight: 300; margin-bottom: 32px; }
+
+  hr { border: none; border-top: 1px solid var(--rule); margin-bottom: 32px; }
+
+  /* SECTIONS */
+  .label {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+
+  .block { margin-bottom: 40px; }
+
+  .context {
+    border-left: 2px solid var(--accent);
+    padding: 14px 16px;
+    background: var(--bg);
+    font-size: 14px; color: var(--mid);
+    line-height: 1.7; font-weight: 300;
+  }
+
+  /* ACTIONS */
+  .action { display: flex; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+  .action:first-child { border-top: 1px solid var(--rule); }
+  .num { font-family: var(--mono); font-size: 20px; color: var(--rule); min-width: 32px; padding-top: 2px; }
+  .action h3 { font-size: 14px; font-weight: 500; margin-bottom: 5px; }
+  .action p  { font-size: 13px; color: var(--mid); line-height: 1.65; font-weight: 300; }
+
+  /* LIVRABLES */
+  .livrable {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 0; border-bottom: 1px solid var(--rule); gap: 12px;
+  }
+  .livrable:first-child { border-top: 1px solid var(--rule); }
+  .livrable span { font-size: 13px; color: var(--mid); }
+  .livrable a {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    text-decoration: none; border: 1px solid var(--accent);
+    padding: 5px 12px; white-space: nowrap; flex-shrink: 0;
+  }
+  .livrable a:hover { background: var(--accent); color: white; }
+
+  footer {
+    margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--rule);
+    font-family: var(--mono); font-size: 10px; color: var(--muted); text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    .livrable { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back">← Portfolio</a>
+
+<span class="tag formation">Administrateur Systèmes Réseaux &amp; Sécurité</span>
+<div class="tags">
+  <span class="tag hi">Sécurité réseau</span>
+  <span class="tag">2024</span>
+</div>
+
+<h1>Sécurisation du SI d'un département R&amp;D pharmaceutique</h1>
+<p class="sub">Open Pharma — refonte de l'architecture réseau post-incident</p>
+<hr>
+
+<div class="block">
+  <p class="label">Contexte et Enjeux</p>
+  <div class="context">
+    Mandaté en tant qu'administrateur sécurité freelance suite à un incident réseau ayant exposé les vulnérabilités du département R&amp;D, j'ai accompagné Open Pharma dans la mise à niveau de son infrastructure.
+    <br><br>
+    L'enjeu consistait à sortir d'une architecture obsolète pour reconstruire un environnement résilient. Cette mission a nécessité une refonte de la segmentation réseau, le déploiement d'équipements de défense périmétrique et un durcissement des politiques d'accès utilisateurs selon les standards de l'ANSSI.
+  </div>
+</div>
+
+<div class="block">
+  <p class="label">Actions menées</p>
+
+  <div class="action">
+    <div class="num">01</div>
+    <div>
+      <h3>Audit technique et stratégie de défense en couches</h3>
+      <p>Évaluation de l'existant pour instaurer une mise à niveau cohérente : déploiement d'un <strong>ensemble Pare-feu/IDS-IPS</strong> pour le filtrage des flux, complété par un <strong>Honeypot</strong> pour détecter les menaces avant qu'elles n'atteignent les données R&amp;D. Cette architecture élimine les points de défaillance unique (<strong>SPOF</strong>) par la <strong>haute disponibilité</strong> et sécurise les accès distants via un <strong>VPN IPSec avec MFA biométrique</strong>.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="num">02</div>
+    <div>
+      <h3>Segmentation et durcissement de l’infrastructure réseau</h3>
+      <p>Refonte de la topologie pour instaurer un cloisonnement strict via le déploiement de <strong>VLANs métiers</strong> (Production, Bureaux, TOIP, Backup) et d’une <strong>DMZ isolée</strong> protégeant les services exposés. Cette nouvelle architecture intègre un plan d'adressage cohérent et l'utilisation de <strong>ports réseaux personnalisés</strong>.</p>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="num">03</div>
+    <div>
+      <h3>Documentation des contraintes utilisateurs</h3>
+      <p>Guide de 11 mesures : MFA + clés biométriques, VPN IPSec, mots de passe (15 car. / KeePass/ANSSI), restrictions horaires, comptes nominatifs, équipements fournis, supports amovibles chiffrés.</p>
+    </div>
+  </div>
+</div>
+
+<div class="block">
+  <p class="label">Livrables</p>
+
+  <div class="livrable">
+    <span>Fichier de sécurisation — liste des équipements</span>
+    <a href="assets/Denis_Luigi_1_fichier_securisation_062024.pdf" target="_blank">Voir le PDF</a>
+  </div>
+  <div class="livrable">
+    <span>Nouvelle cartographie du SI</span>
+    <a href="assets/Denis_Luigi_2_cartographie_052024.pdf" target="_blank">Voir le PDF</a>
+  </div>
+  <div class="livrable">
+    <span>Document contraintes utilisateurs</span>
+    <a href="assets/Denis_Luigi_3_document_contraintes_062024.pdf" target="_blank">Voir le PDF</a>
+  </div>
+</div>
+
+<footer>Luigi Denis · Portfolio professionnel · 2024</footer>
+
+</body>
+</html>
