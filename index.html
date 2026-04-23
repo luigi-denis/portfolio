@@ -8,14 +8,21 @@
     <meta name="description"
         content="Portfolio de Luigi DENIS, Administrateur Systèmes, Réseaux et Sécurité. Expert en infrastructures critiques et passionné de Cybersécurité.">
 
+    <!-- Sécurité & RGPD -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; font-src 'self' https://fonts.gstatic.com https://unpkg.com; img-src 'self' data:; frame-src 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+
     <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <!-- Style CSS -->
     <link rel="stylesheet" href="style.css">
 
     <!-- Icons (Boxicons) -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' integrity="sha384-42kyIPf7HDYLkGffmxDhSx/3Z/53wGBs3nD6wEFxsbeDc7rMO6mkYbkAcpRsnMU2" crossorigin="anonymous">
 </head>
 
 <body>
@@ -47,11 +54,11 @@
                 spécialiser en cybersécurité.</p>
 
             <div class="social-media">
-                <a href="https://www.linkedin.com/in/luigi-d" target="_blank"><i class='bx bxl-linkedin'></i></a>
+                <a href="https://www.linkedin.com/in/luigi-d" target="_blank" rel="noopener noreferrer"><i class='bx bxl-linkedin'></i></a>
                 <a href="mailto:luigi.denis.g@gmail.com"><i class='bx bx-envelope'></i></a>
             </div>
 
-            <a href="assets/CV_Luigi_DENIS.pdf" class="btn" target="_blank" download>Télécharger mon CV</a>
+            <a href="assets/CV_Luigi_DENIS.pdf" class="btn" target="_blank" rel="noopener noreferrer" download>Télécharger mon CV</a>
             <a href="#projects" class="btn btn-outline">Mes projets</a>
         </div>
 
@@ -587,7 +594,7 @@
                             </div>
                         </div>
 
-                        <div class="contact-box" onclick="window.open('https://www.linkedin.com/in/luigi-d', '_blank')">
+                        <div class="contact-box" onclick="window.open('https://www.linkedin.com/in/luigi-d', '_blank', 'noopener,noreferrer')">
                             <div class="icon-box"><i class='bx bxl-linkedin'></i></div>
                             <div class="contact-detail">
                                 <h3>LinkedIn</h3>
@@ -636,7 +643,7 @@
                             </div>
                         </div>
 
-                        <div class="contact-box cv-box" onclick="window.open('assets/CV_Luigi_DENIS.pdf', '_blank')">
+                        <div class="contact-box cv-box" onclick="window.open('assets/CV_Luigi_DENIS.pdf', '_blank', 'noopener,noreferrer')">
                             <div class="icon-box"><i class='bx bx-download'></i></div>
                             <div class="contact-detail">
                                 <h3>Mon CV</h3>
@@ -652,7 +659,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-text">
-            <p>Copyright &copy; 2026 by Luigi DENIS | Tous droits réservés.</p>
+            <p>Copyright &copy; 2026 by Luigi DENIS | Tous droits réservés. | <a href="mentions-legales.html" style="color: var(--main-color); text-decoration: none;">Mentions Légales & Confidentialité</a></p>
         </div>
 
         <div class="footer-iconTop">
@@ -668,15 +675,15 @@
             <div class="modal-loader" id="modalLoader">
                 <i class='bx bx-loader-alt bx-spin'></i>
             </div>
-            <iframe id="projectIframe" src="" frameborder="0"></iframe>
+            <iframe id="projectIframe" src="" frameborder="0" sandbox="allow-scripts allow-same-origin"></iframe>
         </div>
     </div>
 
     <!-- Typed JS -->
-    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js" integrity="sha384-cMrTlShXEGSdSFA359p+3aVUxK/R+0TAfbRZMcTlAn8yqzxEDj05QsS65nTFMMj4" crossorigin="anonymous"></script>
 
     <!-- Scroll Reveal -->
-    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="https://unpkg.com/scrollreveal" integrity="sha384-PdubLDIOlbUl+kBNCK0KdaW23JSjJx0gOYX/kcDfsGGrxnCHpYyX6JIWixXtwW1V" crossorigin="anonymous"></script>
 
     <!-- Scripts JS -->
     <script src="scripts.js"></script>
