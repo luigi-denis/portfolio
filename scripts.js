@@ -191,33 +191,34 @@ function toggleDualV2(element, type) {
     }, 200);
 }
 
-/* MOBILE TIMELINE GENERATOR (V60) */
+/* MOBILE TIMELINE GENERATOR (V65 - With Institutions) */
 function initMobileTimeline() {
     const eduList = document.getElementById('mobile-edu-list');
     const expList = document.getElementById('mobile-exp-list');
     if (!eduList || !expList) return;
 
-    // Récupérer tous les items et les inverser pour avoir le plus récent en haut (V61)
+    // Récupérer tous les items et les inverser pour avoir le plus récent en haut
     const items = Array.from(document.querySelectorAll('.timeline-item')).reverse();
     
     items.forEach(item => {
         if (item.classList.contains('dual-node')) {
             // Handle Education part of Dual Node
             const eduData = item.querySelector('.details-data-edu');
-            // Forcer l'ajout d'espaces à la place des <br> (V64)
+            const eduInst = eduData.querySelector('.institution') ? eduData.querySelector('.institution').innerText : "";
             const eduTitleNode = item.querySelector('.dual-header h3');
             const eduTitle = eduTitleNode.innerHTML.replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]*>/g, ' ').split(/\s+/).join(' ').trim();
             
             const date = item.querySelector('.header-date').innerText;
-            createMobileBlock(eduTitle, date, eduData.innerHTML, 'education', eduList);
+            createMobileBlock(eduTitle, date, eduData.innerHTML, 'education', eduList, eduInst);
 
             // Handle Work part of Dual Node
             const workData = item.querySelector('.details-data-work');
+            const workInst = workData.querySelector('.institution') ? workData.querySelector('.institution').innerText : "";
             const workTitleElement = workData.querySelector('.specific-title');
             const workTitle = workTitleElement ? 
                 workTitleElement.innerHTML.replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]*>/g, ' ').split(/\s+/).join(' ').trim() : 
                 eduTitle;
-            createMobileBlock(workTitle, date, workData.innerHTML, 'work', expList);
+            createMobileBlock(workTitle, date, workData.innerHTML, 'work', expList, workInst);
         } else {
             const titleElement = item.querySelector('h3');
             const titleRaw = item.getAttribute('data-panel-title') || (titleElement ? titleElement.innerHTML : "Détails");
@@ -225,6 +226,10 @@ function initMobileTimeline() {
             
             const dateElement = item.querySelector('.header-date');
             const date = item.getAttribute('data-panel-date') || (dateElement ? dateElement.innerText : "");
+            
+            const instElement = item.querySelector('.institution');
+            const institution = instElement ? instElement.innerText : "";
+
             const detailsElement = item.querySelector('.timeline-details');
             const details = detailsElement ? detailsElement.innerHTML : "";
             
@@ -232,20 +237,28 @@ function initMobileTimeline() {
                          item.classList.contains('work') ? 'work' : 'volunteering';
             const target = type === 'education' ? eduList : expList;
             
-            createMobileBlock(title, date, details, type, target);
+            createMobileBlock(title, date, details, type, target, institution);
         }
     });
 }
 
-function createMobileBlock(title, date, details, type, target) {
+function createMobileBlock(title, date, details, type, target, institution) {
     const block = document.createElement('div');
     block.className = `mobile-item ${type}`;
+    
+    // Si institution n'est pas déjà dans details (pour dual nodes c'est déjà dedans)
+    let instHtml = "";
+    if (institution && !details.includes(institution)) {
+        instHtml = `<p class="mobile-institution"><strong>${institution}</strong></p>`;
+    }
+
     block.innerHTML = `
         <div class="mobile-item-header">
             <h5>${title}</h5>
             <span class="mobile-year">${date}</span>
         </div>
         <div class="mobile-item-details">
+            ${instHtml}
             ${details}
         </div>
     `;
@@ -257,5 +270,38 @@ function createMobileBlock(title, date, details, type, target) {
     target.appendChild(block);
 }
 
+// Attach Event Listeners (CSP Compliant)
+function initTimelineEvents() {
+    // Regular items
+    document.querySelectorAll('.timeline-item:not(.dual-node)').forEach(item => {
+        item.addEventListener('click', () => toggleTimeline(item));
+    });
+
+    // Dual nodes (dots)
+    document.querySelectorAll('.dot-half').forEach(dot => {
+        dot.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const type = dot.getAttribute('data-type');
+            toggleDualV2(dot, type);
+        });
+    });
+
+    // Contact boxes
+    document.querySelectorAll('.contact-box[data-href]').forEach(box => {
+        box.addEventListener('click', () => {
+            window.location.href = box.getAttribute('data-href');
+        });
+    });
+
+    document.querySelectorAll('.contact-box[data-url]').forEach(box => {
+        box.addEventListener('click', () => {
+            window.open(box.getAttribute('data-url'), '_blank', 'noopener,noreferrer');
+        });
+    });
+}
+
 // Call on load
-document.addEventListener('DOMContentLoaded', initMobileTimeline);
+document.addEventListener('DOMContentLoaded', () => {
+    initMobileTimeline();
+    initTimelineEvents();
+});

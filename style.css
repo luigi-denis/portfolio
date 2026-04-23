@@ -1298,6 +1298,14 @@ span.multiple-text {
         padding-left: 0;
     }
 
+    .mobile-institution {
+        font-size: 1.2rem;
+        color: var(--main-color);
+        margin-bottom: 0.8rem;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+
     .mobile-item-details ul li {
         margin-bottom: 0.5rem;
         position: relative;
