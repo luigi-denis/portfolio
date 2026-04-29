@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Configurations VSFTPD</title>
+    <style>
+        :root { --bg: #0d1117; --cont: #161b22; --txt: #c9d1d9; --blue: #58a6ff; --brd: #30363d; --vsftpd: #f0ad4e; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; line-height: 1.5; }
+        header { background: #010409; padding: 20px; text-align: center; border-bottom: 1px solid var(--brd); position: sticky; top: 0; z-index: 100; }
+        nav a { color: var(--blue); text-decoration: none; margin: 0 15px; font-weight: bold; }
+        .container { max-width: 1100px; margin: 20px auto; padding: 20px; }
+        .section { background: var(--cont); border: 1px solid var(--brd); border-radius: 6px; margin-bottom: 40px; overflow: hidden; }
+        .title { background: #21262d; padding: 10px 20px; color: var(--blue); font-family: monospace; font-size: 1.1rem; border-bottom: 1px solid var(--brd); }
+        .vsftpd-header { color: var(--vsftpd); border-left: 4px solid var(--vsftpd); padding-left: 15px; margin-top: 50px; }
+        pre { margin: 0; padding: 20px; background: #000; overflow-x: auto; }
+        code { font-family: 'Consolas', 'Monaco', monospace; color: #e6edf3; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Configurations Serveur FTP</h1>
+    <nav>
+        <a href="#vsftpd-section">VSFTPD</a>
+    </nav>
+</header>
+
+<div class="container">
+
+    <h2 id="vsftpd-section" class="vsftpd-header">CONFIGURATION VSFTPD</h2>
+
+    <div class="section">
+        <div class="title">vsftpd.conf.txt</div>
+        <pre><code># nano 5.4 /etc/vsftpd.conf
+
+# Configuration des délais et timeouts
+#idle_session_timeout=600
+#data_connection_timeout=120
+
+# Paramètres de sécurité et privilèges
+#nopriv_user=ftpsecure
+#async_abor_enable=YES
+
+# Mode de transfert
+#ascii_upload_enable=YES
+#ascii_download_enable=YES
+
+# Bannière d'accueil
+ftpd_banner=Bienvenue sur le serveur FTP de RainbowBank.
+
+# Restrictions Chroot
+chroot_local_user=NO
+chroot_list_enable=YES
+chroot_list_file=/etc/vsftpd.chroot_list
+
+# Dossier sécurisé et service PAM
+secure_chroot_dir=/var/run/vsftpd/empty
+pam_service_name=vsftpd
+
+# Configuration SSL / TLS
+ssl_enable=YES
+allow_anon_ssl=NO
+force_local_data_ssl=YES
+force_local_logins_ssl=YES
+ssl_tlsv1=YES
+ssl_sslv2=YES
+ssl_sslv3=YES
+
+# Certificats SSL
+rsa_cert_file=/srv/ssl/cert/rainbowbank.crt
+rsa_private_key_file=/srv/ssl/key/rainbowbank.key
+
+# Accès utilisateurs locaux
+local_enable=YES
+write_enable=YES
+local_umask=022
+userlist_enable=YES
+userlist_file=/etc/vsftpd.userlist
+userlist_deny=NO
+
+# Répertoires racine
+user_sub_token=$user
+local_root=/var/www/</code></pre>
+    </div>
+
+    <div class="section">
+        <div class="title">vsftpd.chroot_list.txt</div>
+        <pre><code>graphists
+devs
+billporte_dev
+pikasot_graphist</code></pre>
+    </div>
+
+</div>
+
+</body>
+</html>

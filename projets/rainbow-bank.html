@@ -84,6 +84,9 @@
   .livrable a { font-family: var(--mono); font-size: 11px; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 5px 12px; white-space: nowrap; flex-shrink: 0; }
   .livrable a:hover { background: var(--accent); color: white; }
 
+  .btn { display: inline-block; font-family: var(--mono); font-size: 11px; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 8px 16px; margin-top: 16px; transition: all 0.2s ease; }
+  .btn:hover { background: var(--accent); color: white; }
+
   footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--rule); font-family: var(--mono); font-size: 10px; color: var(--muted); text-align: center; }
 </style>
 </head>
@@ -108,6 +111,7 @@
   <div class="context">
     Dans le cadre du projet EXTRANET pour la banque internationale <strong>Rainbow Bank</strong>, j'ai été chargé de concevoir un prototype de serveur web sécurisé. L'objectif était d'héberger deux services web distincts (Extranet et Administration) ainsi qu'un <strong>service FTP sécurisé</strong> sur une même machine virtuelle Linux (Debian). Le projet visait à intégrer des protections contre les attaques type DDoS, slow connections et les tentatives d'intrusion, tout en assurant une gestion des accès pour les équipes techniques (développeurs et graphistes).
   </div>
+  <a href="livrables/rainbowbank_liv/pdf/cahier-des-charges-extranet.pdf" class="btn" target="_blank">Consulter le cahier des charges (PDF)</a>
 </div>
 
 <div class="block">
@@ -151,19 +155,15 @@
 
   <div class="livrable">
     <span>01. Fichiers de configuration Web (Vhosts Apache/Nginx)</span>
-    <a href="#">Consulter .txt</a>
+    <a href="livrables/rainbowbank_liv/configuration-serveurs-web.html" target="_blank">Consulter</a>
   </div>
   <div class="livrable">
     <span>02. Configuration du service sécurisé vsftpd (FTPS)</span>
-    <a href="#">Consulter .txt</a>
+    <a href="livrables/rainbowbank_liv/configuration-vsftpd.html" target="_blank">Consulter</a>
   </div>
   <div class="livrable">
-    <span>03. Script de règles Netfilter (iptables-save)</span>
-    <a href="#">Consulter .txt</a>
-  </div>
-  <div class="livrable">
-    <span>04. Jails et filtres Fail2Ban (vsftpd)</span>
-    <a href="#">Consulter .txt</a>
+    <span>03. Configuration Fail2Ban et règles Netfilter (Iptables)</span>
+    <a href="livrables/rainbowbank_liv/configuration-fail2ban-et-iptables.html" target="_blank">Consulter</a>
   </div>
 </div>
 

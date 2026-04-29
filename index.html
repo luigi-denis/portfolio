@@ -9,7 +9,8 @@
         content="Portfolio de Luigi DENIS, Administrateur Systèmes, Réseaux et Sécurité. Expert en infrastructures critiques et passionné de Cybersécurité.">
 
     <!-- Sécurité & RGPD -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; font-src 'self' https://fonts.gstatic.com https://unpkg.com; img-src 'self' data:; frame-src 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; font-src 'self' https://fonts.gstatic.com https://unpkg.com; img-src 'self' data:; frame-src 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 
@@ -22,7 +23,8 @@
     <link rel="stylesheet" href="style.css">
 
     <!-- Icons (Boxicons) -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' integrity="sha384-42kyIPf7HDYLkGffmxDhSx/3Z/53wGBs3nD6wEFxsbeDc7rMO6mkYbkAcpRsnMU2" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'
+        integrity="sha384-42kyIPf7HDYLkGffmxDhSx/3Z/53wGBs3nD6wEFxsbeDc7rMO6mkYbkAcpRsnMU2" crossorigin="anonymous">
 </head>
 
 <body>
@@ -54,11 +56,13 @@
                 spécialiser en cybersécurité.</p>
 
             <div class="social-media">
-                <a href="https://www.linkedin.com/in/luigi-d" target="_blank" rel="noopener noreferrer"><i class='bx bxl-linkedin'></i></a>
+                <a href="https://www.linkedin.com/in/luigi-d" target="_blank" rel="noopener noreferrer"><i
+                        class='bx bxl-linkedin'></i></a>
                 <a href="mailto:luigi.denis.g@gmail.com"><i class='bx bx-envelope'></i></a>
             </div>
 
-            <a href="assets/CV_Luigi_DENIS.pdf" class="btn" target="_blank" rel="noopener noreferrer" download>Télécharger mon CV</a>
+            <a href="assets/CV_Luigi_DENIS.pdf" class="btn" target="_blank" rel="noopener noreferrer"
+                download>Télécharger mon CV</a>
             <a href="#projects" class="btn btn-outline">Mes projets</a>
         </div>
 
@@ -386,8 +390,7 @@
                             <div class="dot-half work" data-type="work" title="Voir Expérience Pro">
                                 <i class='bx bxs-briefcase'></i>
                             </div>
-                            <div class="dot-half education" data-type="edu"
-                                title="Voir Détails Diplôme">
+                            <div class="dot-half education" data-type="edu" title="Voir Détails Diplôme">
                                 <i class='bx bxs-graduation'></i>
                             </div>
                         </div>
@@ -562,6 +565,31 @@
                         <i class='bx bxl-tux'></i>
                     </div>
                 </div>
+
+                <div class="projects-layer">
+                    <p>Prototype sécurisé multi-services sur environnement Linux durci (Fail2Ban, FTPS, Chiffrement
+                        SSL/TLS).</p>
+                    <a href="projets/rainbow-bank.html" class="project-link"><i class='bx bx-link-external'></i></a>
+                </div>
+            </div>
+
+            <div class="projects-box">
+                <div class="project-icon">
+                    <h4>Dossier Professionnel TSSR 2020</h4>
+                    <div class="tech-stack">
+                        <i class='bx bx-folder'></i>
+                    </div>
+                </div>
+
+                <div class="projects-layer">
+                    <p>Document illustrant une partie de mes travaux personnels durant ma formation de TSSR à l'AFPA en
+                        2020</p>
+                    <a href="projets/pdf/tssr-dossier-professionnel-2020-denis-luigi.pdf" class="project-link"
+                        target="_blank"><i class='bx bx-link-external'></i></a>
+                </div>
+            </div>
+
+        </div>
     </section>
 
     <!-- Contact Section -->
@@ -658,7 +686,8 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-text">
-            <p>Copyright &copy; 2026 by Luigi DENIS | Tous droits réservés. | <a href="mentions-legales.html" style="color: var(--main-color); text-decoration: none;">Mentions Légales & Confidentialité</a></p>
+            <p>Copyright &copy; 2026 by Luigi DENIS | Tous droits réservés. | <a href="mentions-legales.html"
+                    style="color: var(--main-color); text-decoration: none;">Mentions Légales & Confidentialité</a></p>
         </div>
 
         <div class="footer-iconTop">
@@ -674,15 +703,20 @@
             <div class="modal-loader" id="modalLoader">
                 <i class='bx bx-loader-alt bx-spin'></i>
             </div>
-            <iframe id="projectIframe" src="" frameborder="0" sandbox="allow-scripts allow-same-origin"></iframe>
+            <iframe id="projectIframe" src="" frameborder="0"
+                sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
         </div>
     </div>
 
     <!-- Typed JS -->
-    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js" integrity="sha384-cMrTlShXEGSdSFA359p+3aVUxK/R+0TAfbRZMcTlAn8yqzxEDj05QsS65nTFMMj4" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"
+        integrity="sha384-cMrTlShXEGSdSFA359p+3aVUxK/R+0TAfbRZMcTlAn8yqzxEDj05QsS65nTFMMj4"
+        crossorigin="anonymous"></script>
 
     <!-- Scroll Reveal -->
-    <script src="https://unpkg.com/scrollreveal" integrity="sha384-PdubLDIOlbUl+kBNCK0KdaW23JSjJx0gOYX/kcDfsGGrxnCHpYyX6JIWixXtwW1V" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/scrollreveal"
+        integrity="sha384-PdubLDIOlbUl+kBNCK0KdaW23JSjJx0gOYX/kcDfsGGrxnCHpYyX6JIWixXtwW1V"
+        crossorigin="anonymous"></script>
 
     <!-- Scripts JS -->
     <script src="scripts.js"></script>

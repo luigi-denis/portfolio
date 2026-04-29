@@ -76,8 +76,14 @@ const modalLoader = document.getElementById('modalLoader');
 if (projectLinks.length > 0 && projectModal) {
     projectLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
             const url = this.getAttribute('href');
+            
+            // Si c'est un PDF, on laisse le comportement par défaut (ouverture nouvel onglet)
+            if (url.toLowerCase().endsWith('.pdf')) {
+                return;
+            }
+
+            e.preventDefault();
             
             // Afficher la modale et le loader
             modalLoader.style.display = 'block';

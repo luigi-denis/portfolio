@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Configurations Serveurs Web</title>
+    <style>
+        :root { --bg: #0d1117; --cont: #161b22; --txt: #c9d1d9; --blue: #58a6ff; --brd: #30363d; --nginx: #2ea043; --apache: #f85149; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; line-height: 1.5; }
+        header { background: #010409; padding: 20px; text-align: center; border-bottom: 1px solid var(--brd); position: sticky; top: 0; z-index: 100; }
+        nav a { color: var(--blue); text-decoration: none; margin: 0 15px; font-weight: bold; }
+        .container { max-width: 1100px; margin: 20px auto; padding: 20px; }
+        .section { background: var(--cont); border: 1px solid var(--brd); border-radius: 6px; margin-bottom: 40px; overflow: hidden; }
+        .title { background: #21262d; padding: 10px 20px; color: var(--blue); font-family: monospace; font-size: 1.1rem; border-bottom: 1px solid var(--brd); }
+        .apache-header { color: var(--apache); border-left: 4px solid var(--apache); padding-left: 15px; margin-top: 50px; }
+        .nginx-header { color: var(--nginx); border-left: 4px solid var(--nginx); padding-left: 15px; margin-top: 50px; }
+        pre { margin: 0; padding: 20px; background: #000; overflow-x: auto; }
+        code { font-family: 'Consolas', 'Monaco', monospace; color: #e6edf3; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Configurations Serveurs Web</h1>
+    <nav>
+        <a href="#apache-section">APACHE</a>
+        <a href="#nginx-section">NGINX</a>
+    </nav>
+</header>
+
+<div class="container">
+
+    <h2 id="apache-section" class="apache-header">CONFIGURATION APACHE</h2>
+
+    <div class="section">
+        <div class="title">ports.conf</div>
+        <pre><code>Listen 5501
+Listen 80
+&lt;IfModule ssl_module&gt;
+        Listen 5502
+        Listen 443
+&lt;/IfModule&gt;
+
+&lt;IfModule mod_gnutls.c&gt;
+        Listen 5502
+        Listen 443
+&lt;/IfModule&gt;</code></pre>
+    </div>
+
+    <div class="section">
+        <div class="title">vhost admin apache.txt</div>
+        <pre><code>&lt;VirtualHost 150.10.0.10:5501&gt;
+        ServerName admin.rainbowbank.com
+        Redirect permanent / https://150.10.0.10:5502
+&lt;/VirtualHost&gt;
+
+&lt;VirtualHost 150.10.0.10:5502&gt;
+        ServerName admin.rainbowbank.com
+        ServerAlias 150.10.0.10
+        DocumentRoot /var/www/admin.rainbowbank.com
+        SSLEngine On
+        SSLCertificateFile /srv/ssl/cert/rainbowbank.crt
+        SSLCertificateKeyFile /srv/ssl/key/rainbowbank.key
+&lt;/VirtualHost&gt;</code></pre>
+    </div>
+
+    <div class="section">
+        <div class="title">vhost extranet apache.txt</div>
+        <pre><code>&lt;VirtualHost 192.168.10.50:80&gt;
+    ServerName extranet.rainbowbank.com
+    Redirect permanent / https://192.168.10.50:443
+&lt;/VirtualHost&gt;
+
+&lt;VirtualHost 192.168.10.50:443&gt;
+    ServerName extranet.rainbowbank.com
+    DocumentRoot /var/www/extranet.rainbowbank.com
+    SSLEngine On
+    SSLCertificateFile /srv/ssl/cert/rainbowbank.crt
+    SSLCertificateKeyFile /srv/ssl/key/rainbowbank.key
+&lt;/VirtualHost&gt;</code></pre>
+    </div>
+
+    <div class="section">
+        <div class="title">module apache ssl.txt</div>
+        <pre><code>&lt;IfModule mod_ssl.c&gt;
+        SSLRandomSeed startup builtin
+        SSLRandomSeed startup file:/dev/urandom 512
+        SSLRandomSeed connect builtin
+        SSLRandomSeed connect file:/dev/urandom 512
+
+        SSLCipherSuite HIGH:!aNULL
+        SSLProtocol all -SSLv3
+&lt;/IfModule&gt;</code></pre>
+    </div>
+
+    <div class="section">
+        <div class="title">module apache evasive.txt</div>
+        <pre><code>&lt;IfModule mod_evasive20.c&gt;
+    DOSHashTableSize    3097
+    DOSPageCount        2
+    DOSSiteCount        50
+    DOSPageInterval     1
+    DOSSiteInterval     1
+    DOSBlockingPeriod   10
+    DOSSystemCommand \"/bin/echo %s >> /var/log/apache2/mod_evasive/dos_evasive.log && /bin/date >> /var/log/apache2/mod_evasive/dos_evasive.log\"
+&lt;/IfModule&gt;</code></pre>
+    </div>
+
+    <div class="section">
+        <div class="title">module reqtimeout apache.txt</div>
+        <pre><code>&lt;IfModule reqtimeout_module&gt;
+        RequestReadTimeout header=5-10,minrate=500
+        RequestReadTimeout body=10,minrate=500
+&lt;/IfModule&gt;</code></pre>
+    </div>
+
+    <h2 id="nginx-section" class="nginx-header">CONFIGURATION NGINX</h2>
+
+    <div class="section">
+        <div class="title">vhost admin nginx.txt</div>
+        <pre><code>server {
+    listen 150.10.0.10:5501;
+    server_name 150.10.0.10;
+    return 301 https://$server_name:5502$request_uri;
+}
+
+server {
+    listen 150.10.0.10:5502 ssl;
+    server_name 150.10.0.10;
+    root /var/www/admin.rainbowbank.com;
+    ssl_certificate /srv/ssl/rainbowbank.crt;
+    ssl_certificate_key /srv/ssl/rainbowbank.key;
+}</code></pre>
+    </div>
+
+    <div class="section">
+        <div class="title">vhost extranet nginx.txt</div>
+        <pre><code>server {
+    listen 192.168.10.51:80;
+    server_name extranet.rainbowbank.com;
+    return 301 https://192.168.10.51$request_uri;
+}
+
+server {
+    listen 192.168.10.51:443 ssl;
+    server_name extranet.rainbowbank.com;
+    root /var/www/extranet.rainbowbank.com;
+    ssl_certificate /srv/ssl/rainbowbank.crt;
+    ssl_certificate_key /srv/ssl/rainbowbank.key;
+}</code></pre>
+    </div>
+
+</div>
+
+</body>
+</html>

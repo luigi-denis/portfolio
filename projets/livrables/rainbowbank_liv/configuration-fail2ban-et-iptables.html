@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Configurations Sécurité - Fail2Ban & Pare-feu</title>
+    <style>
+        :root { --bg: #0d1117; --cont: #161b22; --txt: #c9d1d9; --blue: #58a6ff; --brd: #30363d; --f2b: #94d3a2; --iptables: #d29922; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; line-height: 1.5; }
+        header { background: #010409; padding: 20px; text-align: center; border-bottom: 1px solid var(--brd); position: sticky; top: 0; z-index: 100; }
+        nav a { color: var(--blue); text-decoration: none; margin: 0 15px; font-weight: bold; }
+        .container { max-width: 1100px; margin: 20px auto; padding: 20px; }
+        .section { background: var(--cont); border: 1px solid var(--brd); border-radius: 6px; margin-bottom: 40px; overflow: hidden; }
+        .title { background: #21262d; padding: 10px 20px; color: var(--blue); font-family: monospace; font-size: 1.1rem; border-bottom: 1px solid var(--brd); }
+        .f2b-header { color: var(--f2b); border-left: 4px solid var(--f2b); padding-left: 15px; margin-top: 50px; }
+        .iptables-header { color: var(--iptables); border-left: 4px solid var(--iptables); padding-left: 15px; margin-top: 50px; }
+        pre { margin: 0; padding: 20px; background: #000; overflow-x: auto; }
+        code { font-family: 'Consolas', 'Monaco', monospace; color: #e6edf3; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Configurations Sécurité</h1>
+    <nav>
+        <a href="#fail2ban-section">FAIL2BAN</a>
+        <a href="#iptables-section">PARE-FEU IPTABLES</a>
+    </nav>
+</header>
+
+<div class="container">
+
+    <h2 id="fail2ban-section" class="f2b-header">CONFIGURATION FAIL2BAN</h2>
+
+    <div class="section">
+        <div class="title">ban vsftpd.txt</div>
+        <pre><code>[vsftpd]
+enabled = true
+port = ftp
+filter = vsftpd
+logpath = /var/log/vsftpd.log
+maxretry = 3
+bantime = 300</code></pre>
+    </div>
+
+    <div class="section">
+        <div class="title">filtre vsftpd.txt</div>
+        <pre><code>[INCLUDES]
+before = common.conf
+
+[Definition]
+__pam_re=\(?%(__pam_auth)s(?:\(\S+\))?\)?:?
+_daemon =  vsftpd
+
+failregex = ^%(__prefix_line)s%(__pam_re)s\s+authentication failure; logname=\S* uid=\S* euid=\S* tty=(ftp)? ruser=\S* rhost=&lt;HOST&gt;(?:\s+user=.*)?\s*$
+            ^ \[pid \d+\] \[[^\]]+\] FAIL LOGIN: Client "&lt;HOST&gt;"(?:\s*$|,)
+
+ignoreregex =</code></pre>
+    </div>
+
+    <h2 id="iptables-section" class="iptables-header">CONFIGURATION PARE-FEU IPTABLES</h2>
+
+    <div class="section">
+        <div class="title">règles parefeu.txt</div>
+        <pre><code>*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT DROP [0:0]
+
+# Autoriser services critiques sur réseau d'administration (ens34)
+-A INPUT -s 150.10.0.0/16 -i ens34 -p tcp -m multiport --dports 20,21,22,989,990,5501,5502 -j ACCEPT
+
+# Autoriser trafic Web sur réseau Extranet
+-A INPUT -s 192.168.10.0/24 -p tcp -m multiport --dports 80,443 -j ACCEPT
+
+# Rejeter le reste du trafic 150.10.0.0/16 avec ICMP unreachable
+-A INPUT -s 150.10.0.0/16 -j REJECT --reject-with icmp-port-unreachable
+
+# Droper le reste du trafic 192.168.10.0/24
+-A INPUT -s 192.168.10.0/24 -j DROP
+
+# Autoriser les sorties vers réseau d'administration
+-A OUTPUT -d 150.10.0.0/16 -o ens34 -p tcp -m multiport --sports 20,21,22,989,990,5501,5502 -j ACCEPT
+
+# Autoriser les sorties vers réseau Extranet
+-A OUTPUT -d 192.168.10.0/24 -p tcp -m multiport --dports 80,443 -j ACCEPT
+
+COMMIT</code></pre>
+    </div>
+
+</div>
+
+</body>
+</html>

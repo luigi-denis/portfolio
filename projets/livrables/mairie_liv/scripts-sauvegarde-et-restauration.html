@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Scripts de Sauvegarde et Restauration</title>
+    <style>
+        :root { --bg: #0d1117; --cont: #161b22; --txt: #c9d1d9; --blue: #58a6ff; --brd: #30363d; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; line-height: 1.5; }
+        header { background: #010409; padding: 20px; text-align: center; border-bottom: 1px solid var(--brd); position: sticky; top: 0; z-index: 100; }
+        nav a { color: var(--blue); text-decoration: none; margin: 0 15px; font-weight: bold; }
+        .container { max-width: 1100px; margin: 20px auto; padding: 20px; }
+        .section { background: var(--cont); border: 1px solid var(--brd); border-radius: 6px; margin-bottom: 40px; overflow: hidden; }
+        .title { background: #21262d; padding: 10px 20px; color: var(--blue); font-family: monospace; font-size: 1.2rem; border-bottom: 1px solid var(--brd); }
+        .desc { padding: 15px 20px; background: #1c2128; font-style: italic; border-bottom: 1px solid var(--brd); font-size: 0.9rem; }
+        pre { margin: 0; padding: 20px; background: #000; overflow-x: auto; }
+        code { font-family: 'Consolas', 'Monaco', monospace; color: #e6edf3; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Scripts pour projet r&d rsync</h1>
+    <nav>
+        <a href="#inbackup">Inbackup</a>
+        <a href="#diffbackup">Diffbackup</a>
+        <a href="#crontab">Crontab</a>
+        <a href="#restauration">Restauration</a>
+    </nav>
+</header>
+
+<div class="container">
+
+    <div id="inbackup" class="section">
+        <div class="title">inbackup.sh</div>
+        <div class="desc">Stratégie 1 : Sauvegarde incrémentale avec rotation LIVE/OLD.</div>
+        <pre><code>#!/bin/bash
+
+# Répertoire source
+SRC_DIR="/home/viewer/FICHIERS/"
+
+# Répertoire de destination
+DEST_DIR="view@192.168.1.109:/home/view/FICHIERS/LIVE"
+
+# Fichier de log
+LOG_FILE="/home/viewer/inbackup.log"
+
+# Début de log 
+echo "Début de sauvegarde du répertoire FIHCHIERS à $(date)" >> $LOG_FILE
+
+# Purge des données du répertoire OLD sur le serveur distant
+ssh view@192.168.1.109 "rm -rf /home/view/FICHIERS/OLD/*" >> $LOG_FILE 2>&1
+
+# Copie du contenu de LIVE vers OLD sur le serveur distant
+ssh view@192.168.1.109 "cp -r /home/view/FICHIERS/LIVE/* /home/view/FICHIERS/OLD/" >> $LOG_FILE 2>&1
+
+# Exécution de la sauvegarde incrémentale avec rsync
+rsync -avzr --delete -e ssh $SRC_DIR $DEST_DIR >> $LOG_FILE 2>&1
+
+# Fin de log
+echo "Sauvegarde du répertoire FIHCHIERS terminée à $(date)" >> $LOG_FILE</code></pre>
+    </div>
+
+    <div id="diffbackup" class="section">
+        <div class="title">diffbackup.sh</div>
+        <div class="desc">Stratégie 2 : Sauvegarde différentielle pour les machines virtuelles.</div>
+        <pre><code>#!/bin/bash
+
+# Répertoire source
+SRC_DIR="/home/viewer/MACHINES/"
+
+# Répertoire de destination
+DEST_DIR="view@192.168.1.109:/home/view/MACHINES"
+
+# Fichier log
+LOG_FILE="/home/viewer/diffbackup.log"
+
+# Backup Rsync
+rsync -avz --delete -e ssh $SRC_DIR $DEST_DIR >> $LOG_FILE 2>&1
+
+# Fin de backup
+echo "Sauvegarde terminée à $(date)" >> $LOG_FILE</code></pre>
+    </div>
+
+    <div id="crontab" class="section">
+        <div class="title">crontab</div>
+        <div class="desc">Planificateur de tâche pour l'exécution automatisée des scripts.</div>
+        <pre><code># Sauvegarde quotidienne du répertoire RH à 18h
+0 18 * * * /home/viewer/script/rh-inbackup.sh
+
+# Sauvegarde quotidienne du répertoire TICKETS à 19h
+0 19 * * * /home/viewer/script/tickets-inbackup.sh
+
+# Sauvegarde quotidienne du répertoire MAILS à 20h
+0 20 * * * /home/viewer/script/mails-inbackup.sh
+
+# Sauvegarde quotidienne du répertoire SITE  à 21h
+0 21 * * * /home/viewer/script/site-inbackup.sh
+
+# Sauvegarde hebdomadaire du répertoire FICHIERS chaque vendredi à 22h
+0 22 * * 5 /home/viewer/script/fichiers-inbackup.sh
+
+# Sauvegarde quotidienne des VM à 3h
+0 3 * * * /home/viewer/script/vm-diffbackup.sh</code></pre>
+    </div>
+
+    <div id="restauration" class="section">
+        <div class="title">restauration.sh</div>
+        <div class="desc">Script interactif de restauration de fichiers ou de machines virtuelles.</div>
+        <pre><code>#!/bin/bash
+
+# Initialisation des variables
+repertoire_base="/home/view"
+repertoire_sauvegarde=""
+sous_repertoire=""
+repertoire_complet="$repertoire_base/$repertoire_sauvegarde/$sous_repertoire"
+source_restauration=""
+repertoire_destination="/viewer/$repertoire_sauvegarde/$source_restauration"
+serveur_sauvegarde="view@192.168.1.109"
+
+# Fonction pour demander le choix de backup
+demander_choix_de_backup() {
+    echo "Choisissez une option :"
+    echo "1. Restaurer une VM"
+    echo "2. Restaurer des fichiers"
+    echo "3. Quitter le script"
+    read -p "Votre choix : " choix
+
+    case $choix in
+        1)
+            repertoire_sauvegarde="MACHINES"
+            sous_repertoire=""
+            backup
+            ;;
+        2)
+            repertoire_de_backup
+            ;;
+        3)
+            echo "Quitter le script."
+            exit 0
+            ;;
+        *)
+            echo "Choix invalide. Veuillez réessayer."
+            demander_choix_de_backup
+            ;;
+    esac
+}
+
+# Fonction pour demander le choix de répertoire de backup
+repertoire_de_backup() {
+    echo "Choisissez une option de répertoire :"
+    echo "1. TICKETS"
+    echo "2. SITE"
+    echo "3. FICHIERS"
+    echo "4. RH"
+    echo "5. MAILS"
+    echo "6. Revenir en arrière"
+    read -p "Votre choix : " choix
+
+    case $choix in
+        1) repertoire_sauvegarde="TICKETS" ;;
+        2) repertoire_sauvegarde="SITE" ;;
+        3) repertoire_sauvegarde="FICHIERS" ;;
+        4) repertoire_sauvegarde="RH" ;;
+        5) repertoire_sauvegarde="MAILS" ;;
+        6) demander_choix_de_backup ;;
+        *)
+            echo "Choix invalide. Veuillez réessayer."
+            repertoire_de_backup
+            ;;
+    esac
+
+    sous_repertoire
+}
+
+# Fonction pour demander le choix du sous-répertoire
+sous_repertoire() {
+    echo "Choisissez une option de sous-répertoire :"
+    echo "1. Avant dernière sauvegarde (OLD)"
+    echo "2. Dernière sauvegarde (LIVE)"
+    echo "3. Revenir en arrière"
+    read -p "Votre choix : " choix
+
+    case $choix in
+        1) sous_repertoire="OLD" ;;
+        2) sous_repertoire="LIVE" ;;
+        3) repertoire_de_backup ;;
+        *)
+            echo "Choix invalide. Veuillez réessayer."
+            sous_repertoire
+            ;;
+    esac
+
+    backup
+}
+
+# Fonction pour effectuer le backup
+backup() {
+    repertoire_complet="$repertoire_base/$repertoire_sauvegarde/$sous_repertoire"
+    echo "Vous avez choisi le répertoire suivant : $repertoire_complet"
+    
+    # Afficher l'arborescence du répertoire via SSH
+    ssh "$serveur_sauvegarde" "tree -FDs $repertoire_complet"
+    
+    read -p "Indiquez le chemin du fichier à restaurer : " source_restauration
+    
+    read -p "Confirmez-vous la restauration ? (1. Oui / 2. Non / 3. Revenir en arrière) : " confirmation
+
+    case $confirmation in
+        1)
+            repertoire_destination="/viewer/$repertoire_sauvegarde/$source_restauration"
+            rsync -avz --delete -e ssh "$serveur_sauvegarde:$repertoire_complet/$source_restauration" "/home/viewer/$repertoire_sauvegarde/$source_restauration" >> /home/viewer/restauration.log 2>&1
+            echo "Restauration effectuée. Détails enregistrés dans /home/viewer/restauration.log"
+            echo "$(date) : $repertoire_complet/$source_restauration -> /home/viewer/$repertoire_sauvegarde/$source_restauration" >> /home/viewer/restauration.log
+            echo "Restauration terminée à $(date)" >> /home/viewer/restauration.log
+            ;;
+        2)
+            backup
+            ;;
+        3)  
+            demander_choix_de_backup
+            ;;
+        *)
+            echo "Choix invalide. Veuillez réessayer."
+            backup
+            ;;
+    esac
+}
+
+# Lancement du script
+demander_choix_de_backup</code></pre>
+    </div>
+
+</div>
+</body>
+</html>

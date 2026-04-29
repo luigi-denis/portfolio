@@ -38,7 +38,10 @@
   .action p  { font-size: 13px; color: var(--mid); line-height: 1.65; font-weight: 300; }
   .livrable { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--rule); gap: 12px; }
   .livrable span { font-size: 13px; color: var(--mid); }
-  .livrable a { font-family: var(--mono); font-size: 11px; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 5px 12px; }
+  .livrable a { font-family: var(--mono); font-size: 11px; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 5px 12px; transition: all 0.3s ease; }
+  .livrable a:hover { background: var(--accent); color: white; }
+  .btn-context { display: inline-block; margin-top: 12px; font-family: var(--mono); font-size: 10px; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 6px 14px; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.05em; }
+  .btn-context:hover { background: var(--accent); color: white; }
   footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--rule); font-family: var(--mono); font-size: 10px; color: var(--muted); text-align: center; }
 </style>
 </head>
@@ -66,6 +69,10 @@
     La mairie de Mareuil-sur-Oise a généralisé l'usage de la virtualisation pour ses services internes et publics. Cependant, le logiciel de sauvegarde actuel est devenu incompatible avec ces technologies. Ce projet de R&amp;D a pour objectif de concevoir une stratégie de sauvegarde basée sur l'outil libre <strong>rsync</strong>.
     <br><br>
     L'enjeu principal est de garantir la <strong>continuité de service</strong> via une double approche : la sauvegarde granulaire des données applicatives et la sauvegarde différentielle des machines virtuelles. La solution doit assurer une sécurité totale des flux via SSH et permettre une restauration rapide des versions n-1 pour répondre aux incidents utilisateurs.
+    <br><br>
+    Pour ce projet, une liste de prérequis techniques m'a été fournie afin d'encadrer la mise en place des deux stratégies de sauvegardes.
+    <br>
+    <a href="livrables/mairie_liv/prerequis_mairie_rsync.pdf" target="_blank" class="btn-context">Consulter les prérequis</a>
   </div>
 </div>
 
@@ -107,10 +114,14 @@
 
 <div class="block">
   <p class="label">Livrables techniques</p>
-  <div class="livrable"><span>01. Scripts de sauvegarde automatisée (.sh)</span><a href="#">Consulter</a></div>
-  <div class="livrable"><span>02. Script de restauration interactive (restauration.sh)</span><a href="#">Consulter</a></div>
-  <div class="livrable"><span>03. Fichiers de traces rsync (.log)</span><a href="#">Voir les logs</a></div>
-  <div class="livrable"><span>04. Configuration Crontab</span><a href="#">Ouvrir</a></div>
+  <div class="livrable">
+    <span>01. Scripts de sauvegarde, de restauration et planificateur de tâches</span>
+    <a href="livrables/mairie_liv/scripts-sauvegarde-et-restauration.html" target="_blank">Consulter .html</a>
+  </div>
+  <div class="livrable">
+    <span>02. Documentation du fonctionnement des scripts</span>
+    <a href="livrables/mairie_liv/Documentation_Sauvegarde.pdf" target="_blank">Voir le PDF</a>
+  </div>
 </div>
 
 <footer>Luigi Denis · Portfolio professionnel · 2024 · <a href="../mentions-legales.html" style="color: inherit; text-decoration: underline;">Mentions Légales</a></footer>
