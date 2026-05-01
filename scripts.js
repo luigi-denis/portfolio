@@ -306,8 +306,31 @@ function initTimelineEvents() {
     });
 }
 
+/* OBFUSCATION LOGIC */
+function initObfuscation() {
+    // Decode text contents
+    document.querySelectorAll('.obf-text').forEach(el => {
+        el.textContent = atob(el.getAttribute('data-obf'));
+    });
+
+    // Decode links
+    document.querySelectorAll('.obf-link').forEach(el => {
+        const decoded = atob(el.getAttribute('data-obf'));
+        const type = el.getAttribute('data-type');
+        el.href = type + ':' + decoded;
+    });
+
+    // Decode contact boxes (data-href)
+    document.querySelectorAll('.obf-box').forEach(el => {
+        const decoded = atob(el.getAttribute('data-obf'));
+        const type = el.getAttribute('data-type');
+        el.setAttribute('data-href', type + ':' + decoded);
+    });
+}
+
 // Call on load
 document.addEventListener('DOMContentLoaded', () => {
+    initObfuscation();
     initMobileTimeline();
     initTimelineEvents();
 });
