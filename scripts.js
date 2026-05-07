@@ -63,6 +63,15 @@ function initContactForm() {
 
     if (!contactForm) return;
 
+    // Calculer dynamiquement l'URL de redirection vers merci.html (même domaine)
+    const redirectField = document.getElementById('form-redirect');
+    if (redirectField) {
+        const currentUrl = window.location.href;
+        const baseUrl = currentUrl.split('?')[0].split('#')[0];
+        const basePath = baseUrl.substring(0, baseUrl.lastIndexOf('/') + 1);
+        redirectField.value = basePath + 'merci.html';
+    }
+
     contactForm.addEventListener('submit', function (e) {
         // Validation manuelle des champs obligatoires
         const requiredFields = [

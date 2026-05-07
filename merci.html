@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message envoyé | Luigi DENIS</title>
+
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'
+        integrity="sha384-42kyIPf7HDYLkGffmxDhSx/3Z/53wGBs3nD6wEFxsbeDc7rMO6mkYbkAcpRsnMU2" crossorigin="anonymous">
+
+    <style>
+        .merci-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .merci-icon {
+            font-size: 8rem;
+            color: #2ecc71;
+            margin-bottom: 2rem;
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .merci-container h1 {
+            font-size: 3.5rem;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .merci-container h1 span {
+            color: var(--main-color);
+        }
+
+        .merci-container p {
+            font-size: 1.6rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+        }
+
+        .merci-container .btn {
+            font-size: 1.6rem;
+            padding: 1.2rem 3rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header sticky">
+        <a href="index.html" class="logo">Luigi<span>DENIS</span></a>
+    </header>
+
+    <section class="merci-container">
+        <i class='bx bx-check-circle merci-icon'></i>
+        <h1>Merci pour votre <span>message</span> !</h1>
+        <p>Votre message a bien été envoyé. Je reviendrai vers vous dans moins de <strong>24 heures</strong>.</p>
+        <a href="index.html" class="btn"><i class='bx bx-arrow-back'></i> Retour au portfolio</a>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-text">
+            <p>Copyright &copy; 2026 by Luigi DENIS | Tous droits réservés.</p>
+        </div>
+    </footer>
+</body>
+</html>
