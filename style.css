@@ -1468,3 +1468,265 @@ span.multiple-text {
 .header-top { position: absolute; top: 50%; margin-top: 4rem; text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; }
 .dual-header h3 { color: #fff !important; transition: color 0.3s; white-space: normal !important; line-height: 1.1 !important; margin-bottom: 0.5rem !important; }
 
+
+/* CONTACT FORM STYLES */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.input-row {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.input-row .input-box {
+    flex: 1;
+}
+
+.contact-form .input-box {
+    position: relative;
+}
+
+.contact-form .input-box input,
+.contact-form .input-box select,
+.contact-form .input-box textarea {
+    width: 100%;
+    padding: 1.5rem;
+    font-size: 1.6rem;
+    color: var(--text-color);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.contact-form .input-box select {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    padding-right: 4.5rem; /* Space for the icon */
+}
+
+.select-icon {
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.4rem;
+    color: var(--main-color);
+    pointer-events: none; /* Let clicks pass through to select */
+    transition: 0.3s;
+}
+
+.contact-form .input-box select:focus + .select-icon {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.form-notice {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 0.5rem;
+    font-style: italic;
+}
+
+.contact-form .input-box select option {
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+.contact-form .input-box input:focus,
+.contact-form .input-box select:focus,
+.contact-form .input-box textarea:focus {
+    border-color: var(--main-color);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 1rem rgba(0, 238, 255, 0.1);
+}
+
+.contact-form textarea {
+    resize: none;
+}
+
+.contact-form .btn {
+    width: fit-content;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 3rem;
+    margin-top: 1rem;
+}
+
+.contact-form .btn i {
+    font-size: 2rem;
+    transition: 0.3s;
+}
+
+.contact-form .btn:hover i {
+    transform: translateX(5px) rotate(-20deg);
+}
+
+.contact-form .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* FORM RESULT MESSAGES */
+.form-result {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+    padding: 1.2rem;
+    border-radius: 0.8rem;
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.form-result.success {
+    display: block;
+    background: rgba(46, 204, 113, 0.1);
+    border: 1px solid rgba(46, 204, 113, 0.3);
+    color: #2ecc71;
+}
+
+.form-result.error {
+    display: block;
+    background: rgba(231, 76, 60, 0.1);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    color: #e74c3c;
+}
+
+@media (max-width: 450px) {
+    .input-row {
+        flex-direction: column;
+    }
+}
+
+/* FORM ACTIONS ALIGNMENT */
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.form-actions .social-btn {
+    margin-top: 0; /* Override default margin */
+    flex: 1;
+}
+
+/* REFINED SLEEK SOCIAL BUTTONS */
+.social-btn {
+    display: flex;
+    align-items: center;
+    gap: 1.8rem;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 1rem 2rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-color);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+}
+
+/* Subtle background glow effect on hover */
+.social-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.05),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+.social-btn:hover::before {
+    left: 100%;
+}
+
+.social-btn i:first-child {
+    font-size: 2.6rem;
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.5s ease;
+    filter: drop-shadow(0 0 5px transparent);
+}
+
+.social-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.social-text span {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.5;
+    font-weight: 400;
+    margin-bottom: 0.2rem;
+}
+
+.social-text strong {
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.9);
+    transition: color 0.3s ease;
+}
+
+.social-btn .arrow {
+    font-size: 2.2rem;
+    opacity: 0.3;
+    transform: translateX(-5px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--main-color);
+}
+
+.social-btn:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(0, 238, 255, 0.3);
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 238, 255, 0.05);
+}
+
+.social-btn:hover .arrow {
+    opacity: 1;
+    transform: translateX(5px);
+}
+
+.social-btn:hover i:first-child {
+    color: #0077b5;
+    transform: scale(1.1) rotate(-5deg);
+    filter: drop-shadow(0 0 8px rgba(0, 119, 181, 0.4));
+}
+
+.social-btn:hover .social-text strong {
+    color: #fff;
+}
+
+/* Version spécifique LinkedIn */
+.social-btn.linkedin {
+    border-color: rgba(0, 119, 181, 0.2);
+}
+
+.social-btn.linkedin i:first-child {
+    color: #0077b5;
+    filter: drop-shadow(0 0 5px rgba(0, 119, 181, 0.2));
+}
+
+.social-btn.linkedin:hover {
+    border-color: rgba(0, 119, 181, 0.6);
+    background: rgba(0, 119, 181, 0.05);
+}
+

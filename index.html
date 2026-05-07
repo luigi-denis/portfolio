@@ -10,7 +10,7 @@
 
     <!-- Sécurité & RGPD -->
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; font-src 'self' https://fonts.gstatic.com https://unpkg.com; img-src 'self' data:; frame-src 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+        content="default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; font-src 'self' https://fonts.gstatic.com https://unpkg.com; img-src 'self' data:; frame-src 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://api.web3forms.com; connect-src 'self' https://api.web3forms.com https://*.web3forms.com;">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 
@@ -58,7 +58,7 @@
             <div class="social-media">
                 <a href="https://www.linkedin.com/in/luigi-d" target="_blank" rel="noopener noreferrer"><i
                         class='bx bxl-linkedin'></i></a>
-                <a href="#" class="obf-link" data-obf="bHVpZ2kuZGVuaXMuZ0BnbWFpbC5jb20=" data-type="mailto"><i class='bx bx-envelope'></i></a>
+                <a href="#contact"><i class='bx bx-envelope'></i></a>
             </div>
 
             <a href="pdf/Luigi DENIS CV ASRS 2026.pdf" class="btn" target="_blank" rel="noopener noreferrer"
@@ -110,8 +110,7 @@
                         <li><i class='bx bx-user'></i><strong>Prénom :</strong> Luigi</li>
                         <li><i class='bx bx-id-card'></i><strong>Nom :</strong> DENIS</li>
                         <li><i class='bx bx-globe'></i><strong>Nationalité :</strong> Française</li>
-                        <li><i class='bx bx-phone'></i><strong>Téléphone :</strong> <span class="obf-text" data-obf="MDcgNjkgNzIgMzIgMjY="></span></li>
-                        <li><i class='bx bx-envelope'></i><strong>Mail :</strong> <span class="obf-text" data-obf="bHVpZ2kuZGVuaXMuZ0BnbWFpbC5jb20="></span></li>
+
                         <li><i class='bx bx-message-rounded-dots'></i><strong>Langues :</strong> Français, Créole,
                             Anglais</li>
                     </ul>
@@ -595,47 +594,76 @@
     <!-- Contact Section -->
     <section class="contact" id="contact">
         <h2 class="heading">Contactez-<span>moi</span></h2>
-        <p class="contact-intro">Recruteurs, mon profil vous intéresse ? Je suis à votre écoute pour échanger sur vos
-            projets et opportunités de collaboration.</p>
 
         <div class="contact-container">
             <div class="contact-wrapper">
                 <div class="contact-grid">
                     <!-- Groupe 1: Coordonnées -->
                     <div class="contact-group">
-                        <h3 class="group-title"><i class='bx bx-user-pin'></i> Me Contacter Directement</h3>
+                        <h3 class="group-title"><i class='bx bx-user-pin'></i> Me contacter directement</h3>
 
-                        <div class="contact-box obf-box" data-obf="bHVpZ2kuZGVuaXMuZ0BnbWFpbC5jb20=" data-type="mailto">
-                            <div class="icon-box"><i class='bx bx-envelope'></i></div>
-                            <div class="contact-detail">
-                                <h3>Email</h3>
-                                <p class="obf-text" data-obf="bHVpZ2kuZGVuaXMuZ0BnbWFpbC5jb20="></p>
-                            </div>
-                        </div>
+                        <p class="contact-text">Recruteurs, mon profil vous intéresse ? Je suis à votre écoute pour
+                            échanger sur vos projets et opportunités de collaboration. Envoyez moi un message, j'y
+                            répondrai sous 24h.</p>
 
-                        <div class="contact-box info-only">
-                            <div class="icon-box"><i class='bx bx-phone'></i></div>
-                            <div class="contact-detail">
-                                <h3>Téléphone</h3>
-                                <p class="obf-text" data-obf="MDcgNjkgNzIgMzIgMjY="></p>
-                            </div>
-                        </div>
+                        <form id="contact-form" class="contact-form">
+                            <!-- Les champs de sécurité Web3Forms seront injectés via JS -->
 
-                        <div class="contact-box" data-url="https://www.linkedin.com/in/luigi-d">
-                            <div class="icon-box"><i class='bx bxl-linkedin'></i></div>
-                            <div class="contact-detail">
-                                <h3>LinkedIn</h3>
-                                <p>Luigi DENIS</p>
+                            <div class="input-row">
+                                <div class="input-box">
+                                    <input type="text" name="nom" placeholder="Nom*" required>
+                                </div>
+                                <div class="input-box">
+                                    <input type="text" name="prenom" placeholder="Prénom*" required>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="contact-box highlight-box">
-                            <div class="icon-box"><i class='bx bx-check-circle'></i></div>
-                            <div class="contact-detail">
-                                <h3>Disponibilité</h3>
-                                <p>Immédiate</p>
+                            <div class="input-row">
+                                <div class="input-box">
+                                    <input type="email" name="email" placeholder="Email*" required>
+                                </div>
+                                <div class="input-box">
+                                    <input type="text" name="entreprise" placeholder="Entreprise">
+                                </div>
                             </div>
-                        </div>
+
+                            <div class="input-box">
+                                <select name="objet" required id="form-objet">
+                                    <option value="" disabled selected>Objet*</option>
+                                    <option value="Offre d'alternance">Offre d'alternance</option>
+                                    <option value="Offre d'emploi">Offre d'emploi</option>
+                                    <option value="Demande d'informations">Demande d'informations</option>
+                                </select>
+                                <i class='bx bx-chevron-down select-icon'></i>
+                            </div>
+
+                            <div class="input-box">
+                                <textarea name="message" cols="30" rows="5" placeholder="Votre Message*"
+                                    required></textarea>
+                            </div>
+
+                            <p class="form-notice">Les champs marqués d'un astérisque (*) sont obligatoires.</p>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn" id="submit-btn">
+                                    <span>Envoyer le message</span>
+                                    <i class='bx bx-send'></i>
+                                </button>
+
+                                <a href="https://www.linkedin.com/in/luigi-d" target="_blank" rel="noopener noreferrer"
+                                    class="social-btn linkedin">
+                                    <i class='bx bxl-linkedin'></i>
+                                    <div class="social-text">
+                                        <span>Suivez-moi sur</span>
+                                        <strong>LinkedIn</strong>
+                                    </div>
+                                    <i class='bx bx-right-arrow-alt arrow'></i>
+                                </a>
+                            </div>
+
+                            <div id="form-result" class="form-result"></div>
+                        </form>
+
                     </div>
 
                     <!-- Groupe 2: Objectif Pro -->
@@ -651,6 +679,14 @@
                                     <br><span class="text-sep">OU</span><br>
                                     <span class="text-blue">Administrateur systèmes et réseaux</span>
                                 </p>
+                            </div>
+                        </div>
+
+                        <div class="contact-box highlight-box info-only">
+                            <div class="icon-box"><i class='bx bx-check-circle'></i></div>
+                            <div class="contact-detail">
+                                <h3>Disponibilité</h3>
+                                <p>Immédiate</p>
                             </div>
                         </div>
 
