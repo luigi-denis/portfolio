@@ -65,18 +65,49 @@ function initContactForm() {
 
     if (!contactForm) return;
 
+    // Jingle de confirmation (Web Audio API — aucun fichier externe nécessaire)
+    function playSuccessJingle() {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const notes = [
+                { freq: 523.25, start: 0, dur: 0.15 },     // Do5
+                { freq: 659.25, start: 0.15, dur: 0.15 },   // Mi5
+                { freq: 783.99, start: 0.30, dur: 0.15 },   // Sol5
+                { freq: 1046.50, start: 0.45, dur: 0.30 }   // Do6 (tenu)
+            ];
+            notes.forEach(n => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = n.freq;
+                gain.gain.setValueAtTime(0.15, ctx.currentTime + n.start);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + n.start + n.dur);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(ctx.currentTime + n.start);
+                osc.stop(ctx.currentTime + n.start + n.dur + 0.05);
+            });
+        } catch (e) {
+            // Pas de son si le navigateur ne supporte pas Web Audio
+        }
+    }
+
     let formSubmitted = false;
 
     // Détecter quand l'iframe charge (= Web3Forms a reçu le message)
     if (contactIframe) {
         contactIframe.addEventListener('load', function () {
-            if (!formSubmitted) return; // Ignorer le chargement initial de la page
+            if (!formSubmitted) return;
 
             // Le formulaire a été envoyé avec succès
             formResult.textContent = "Merci ! Votre message a bien été envoyé. Je reviendrai vers vous dans moins de 24 heures.";
             formResult.className = 'form-result success';
             formResult.style.display = 'block';
             contactForm.reset();
+
+            // Jouer le jingle et scroller vers le message
+            playSuccessJingle();
+            formResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             // Restaurer le bouton
             if (submitBtn) {
