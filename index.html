@@ -606,8 +606,12 @@
                             échanger sur vos projets et opportunités de collaboration. Envoyez moi un message, j'y
                             répondrai sous 24h.</p>
 
-                        <form id="contact-form" class="contact-form">
-                            <!-- Les champs de sécurité Web3Forms seront injectés via JS -->
+                        <form id="contact-form" class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+                            <!-- Web3Forms hidden fields -->
+                            <input type="hidden" name="access_key" value="53e7281f-f03c-415c-b6df-d7edde834a19">
+                            <input type="hidden" name="from_name" value="Portfolio - Luigi DENIS">
+                            <input type="hidden" name="subject" value="Nouveau message depuis le Portfolio">
+                            <input type="hidden" name="redirect" value="https://web3forms.com/success">
 
                             <div class="input-row">
                                 <div class="input-box">

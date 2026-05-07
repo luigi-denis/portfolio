@@ -60,14 +60,11 @@ const typed = new Typed('.multiple-text', {
 function initContactForm() {
     const contactForm = document.getElementById('contact-form');
     const formResult = document.getElementById('form-result');
-    const submitBtn = document.getElementById('submit-btn');
 
     if (!contactForm) return;
 
     contactForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        // 1. Validation manuelle des champs obligatoires
+        // Validation manuelle des champs obligatoires
         const requiredFields = [
             { name: 'nom', label: 'Nom' },
             { name: 'prenom', label: 'Prénom' },
@@ -77,16 +74,18 @@ function initContactForm() {
         ];
 
         let missingFields = [];
-        const formData = new FormData(contactForm);
 
         requiredFields.forEach(field => {
-            const value = formData.get(field.name);
+            const input = contactForm.querySelector(`[name="${field.name}"]`);
+            const value = input ? input.value : "";
             if (!value || value.trim() === "") {
                 missingFields.push(field.label);
-                const input = contactForm.querySelector(`[name="${field.name}"]`);
                 if (input) {
                     input.style.borderColor = "#e74c3c";
                     input.addEventListener('input', () => {
+                        input.style.borderColor = "";
+                    }, { once: true });
+                    input.addEventListener('change', () => {
                         input.style.borderColor = "";
                     }, { once: true });
                 }
@@ -94,59 +93,15 @@ function initContactForm() {
         });
 
         if (missingFields.length > 0) {
+            e.preventDefault(); // Bloquer uniquement si la validation échoue
             formResult.textContent = `Veuillez remplir les champs suivants : ${missingFields.join(', ')}.`;
             formResult.className = 'form-result error';
             formResult.style.display = 'block';
             return;
         }
 
-        // Afficher l'état de chargement
-        submitBtn.disabled = true;
-        submitBtn.querySelector('span').textContent = 'Envoi en cours...';
-        submitBtn.querySelector('i').className = 'bx bx-loader-alt bx-spin';
-
-        // Sécurité : Injection de la clé API (obfusquée en Base64 dans le script)
-        const encodedKey = "NTNlNzI4MWYtZjAzYy00MTVjLWI2ZGYtZDdlZGRlODM0YTE5";
-        formData.append('access_key', atob(encodedKey));
-        formData.append('from_name', 'Portfolio - Luigi DENIS');
-        formData.append('subject', 'Nouveau message depuis le Portfolio');
-
-        formResult.className = 'form-result';
-        formResult.style.display = 'none';
-
-        // Envoi via FormData (plus robuste pour Web3Forms)
-        fetch('https://api.web3forms.com/submit', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Accept': 'application/json'
-            }
-        })
-        .then(async (response) => {
-            let result = await response.json();
-            if (response.status == 200) {
-                formResult.textContent = "Merci ! Votre message a bien été envoyé. Je reviendrai vers vous dans moins de 24 heures.";
-                formResult.className = 'form-result success';
-                contactForm.reset();
-            } else {
-                console.error("Erreur Web3Forms:", result);
-                formResult.textContent = result.message || "Une erreur est survenue lors de l'envoi.";
-                formResult.className = 'form-result error';
-            }
-        })
-        .catch(error => {
-            console.error("Erreur réseau ou CSP:", error);
-            formResult.textContent = "Impossible d'envoyer le message. Vérifiez votre connexion ou la console du navigateur.";
-            formResult.className = 'form-result error';
-        })
-        .then(function () {
-            submitBtn.disabled = false;
-            submitBtn.querySelector('span').textContent = 'Envoyer le message';
-            submitBtn.querySelector('i').className = 'bx bx-send';
-            setTimeout(() => {
-                formResult.style.display = 'block';
-            }, 100);
-        });
+        // Si tout est valide, on laisse le formulaire se soumettre nativement (pas de preventDefault)
+        // Le navigateur enverra le POST vers https://api.web3forms.com/submit
     });
 }
 
