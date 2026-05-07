@@ -60,20 +60,19 @@ const typed = new Typed('.multiple-text', {
 function initContactForm() {
     const contactForm = document.getElementById('contact-form');
     const formResult = document.getElementById('form-result');
-    const contactIframe = document.getElementById('contact-iframe');
     const submitBtn = document.getElementById('submit-btn');
 
     if (!contactForm) return;
 
-    // Jingle de confirmation (Web Audio API — aucun fichier externe nécessaire)
+    // Jingle de confirmation (Web Audio API)
     function playSuccessJingle() {
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
             const notes = [
-                { freq: 523.25, start: 0, dur: 0.15 },     // Do5
-                { freq: 659.25, start: 0.15, dur: 0.15 },   // Mi5
-                { freq: 783.99, start: 0.30, dur: 0.15 },   // Sol5
-                { freq: 1046.50, start: 0.45, dur: 0.30 }   // Do6 (tenu)
+                { freq: 523.25, start: 0, dur: 0.15 },
+                { freq: 659.25, start: 0.15, dur: 0.15 },
+                { freq: 783.99, start: 0.30, dur: 0.15 },
+                { freq: 1046.50, start: 0.45, dur: 0.30 }
             ];
             notes.forEach(n => {
                 const osc = ctx.createOscillator();
@@ -87,41 +86,13 @@ function initContactForm() {
                 osc.start(ctx.currentTime + n.start);
                 osc.stop(ctx.currentTime + n.start + n.dur + 0.05);
             });
-        } catch (e) {
-            // Pas de son si le navigateur ne supporte pas Web Audio
-        }
-    }
-
-    let formSubmitted = false;
-
-    // Détecter quand l'iframe charge (= Web3Forms a reçu le message)
-    if (contactIframe) {
-        contactIframe.addEventListener('load', function () {
-            if (!formSubmitted) return;
-
-            // Le formulaire a été envoyé avec succès
-            formResult.textContent = "Merci ! Votre message a bien été envoyé. Je reviendrai vers vous dans moins de 24 heures.";
-            formResult.className = 'form-result success';
-            formResult.style.display = 'block';
-            contactForm.reset();
-
-            // Jouer le jingle et scroller vers le message
-            playSuccessJingle();
-            formResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-            // Restaurer le bouton
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.querySelector('span').textContent = 'Envoyer le message';
-                submitBtn.querySelector('i').className = 'bx bx-send';
-            }
-
-            formSubmitted = false;
-        });
+        } catch (e) { }
     }
 
     contactForm.addEventListener('submit', function (e) {
-        // Validation manuelle des champs obligatoires
+        e.preventDefault();
+
+        // 1. Validation manuelle
         const requiredFields = [
             { name: 'nom', label: 'Nom' },
             { name: 'prenom', label: 'Prénom' },
@@ -131,58 +102,69 @@ function initContactForm() {
         ];
 
         let missingFields = [];
-
         requiredFields.forEach(field => {
             const input = contactForm.querySelector(`[name="${field.name}"]`);
-            const value = input ? input.value : "";
-            if (!value || value.trim() === "") {
+            if (!input || !input.value.trim()) {
                 missingFields.push(field.label);
                 if (input) {
                     input.style.borderColor = "#e74c3c";
-                    input.addEventListener('input', () => {
-                        input.style.borderColor = "";
-                    }, { once: true });
-                    input.addEventListener('change', () => {
-                        input.style.borderColor = "";
-                    }, { once: true });
+                    input.addEventListener('input', () => input.style.borderColor = "", { once: true });
                 }
             }
         });
 
         if (missingFields.length > 0) {
-            e.preventDefault();
             formResult.textContent = `Veuillez remplir les champs suivants : ${missingFields.join(', ')}.`;
             formResult.className = 'form-result error';
             formResult.style.display = 'block';
             return;
         }
 
-        // Validation OK : marquer comme soumis et afficher l'état de chargement
-        formSubmitted = true;
+        // 2. Préparation de l'envoi
+        const formData = new FormData(contactForm);
+        
+        // Afficher le chargement
+        submitBtn.disabled = true;
+        const originalBtnSpan = submitBtn.querySelector('span');
+        const originalBtnIcon = submitBtn.querySelector('i');
+        const originalBtnText = originalBtnSpan.textContent;
+        originalBtnSpan.textContent = 'Envoi en cours...';
+        originalBtnIcon.className = 'bx bx-loader-alt bx-spin';
         formResult.style.display = 'none';
 
-        if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.querySelector('span').textContent = 'Envoi en cours...';
-            submitBtn.querySelector('i').className = 'bx bx-loader-alt bx-spin';
-        }
-
-        // Le formulaire se soumet nativement dans l'iframe (pas de preventDefault ici)
-        // Timeout de sécurité : si l'iframe ne charge pas en 15s, afficher quand même un message
-        setTimeout(function () {
-            if (formSubmitted) {
-                formResult.textContent = "Votre message a probablement été envoyé. Si vous ne recevez pas de réponse sous 24h, contactez-moi via LinkedIn.";
+        // 3. Envoi via Fetch (AJAX) pour une vraie vérification
+        fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+        })
+        .then(async response => {
+            const data = await response.json();
+            if (response.ok && data.success) {
+                // SUCCÈS RÉEL
+                formResult.textContent = "Merci ! Votre message a bien été envoyé. Je reviendrai vers vous dans moins de 24 heures.";
                 formResult.className = 'form-result success';
-                formResult.style.display = 'block';
-                formSubmitted = false;
-
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.querySelector('span').textContent = 'Envoyer le message';
-                    submitBtn.querySelector('i').className = 'bx bx-send';
-                }
+                contactForm.reset();
+                playSuccessJingle();
+                formResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                // ERREUR SERVEUR (Clé invalide, spam, etc.)
+                console.error("Erreur Web3Forms:", data);
+                formResult.textContent = data.message || "Une erreur est survenue lors de l'envoi.";
+                formResult.className = 'form-result error';
             }
-        }, 15000);
+        })
+        .catch(error => {
+            // ERREUR RÉSEAU (CORS, Connexion, CSP)
+            console.error("Erreur réseau ou sécurité:", error);
+            formResult.textContent = "Impossible d'envoyer le message. Vérifiez votre connexion ou la console.";
+            formResult.className = 'form-result error';
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            originalBtnSpan.textContent = originalBtnText;
+            originalBtnIcon.className = 'bx bx-send';
+            formResult.style.display = 'block';
+        });
     });
 }
 
