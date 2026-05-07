@@ -449,10 +449,43 @@ function initObfuscation() {
     });
 }
 
+/* SMOOTH SCROLL SANS MODIFICATION DE L'URL */
+function initSmoothScroll() {
+    // Intercepter tous les clics sur les liens internes (#section)
+    document.addEventListener('click', function (e) {
+        const link = e.target.closest('a[href^="#"]');
+        if (!link) return;
+
+        const targetId = link.getAttribute('href');
+        if (!targetId || targetId === '#') {
+            // Lien "#" seul = retour en haut
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return;
+        }
+
+        const targetSection = document.querySelector(targetId);
+        if (targetSection) {
+            e.preventDefault();
+            targetSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+
+    // Nettoyer le hash de l'URL au chargement si présent
+    if (window.location.hash) {
+        const target = document.querySelector(window.location.hash);
+        if (target) {
+            setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 100);
+        }
+        history.replaceState(null, '', window.location.pathname);
+    }
+}
+
 // Call on load
 document.addEventListener('DOMContentLoaded', () => {
     initObfuscation();
     initMobileTimeline();
     initTimelineEvents();
     initContactForm();
+    initSmoothScroll();
 });
