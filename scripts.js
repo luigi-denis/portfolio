@@ -60,16 +60,33 @@ const typed = new Typed('.multiple-text', {
 function initContactForm() {
     const contactForm = document.getElementById('contact-form');
     const formResult = document.getElementById('form-result');
+    const contactIframe = document.getElementById('contact-iframe');
+    const submitBtn = document.getElementById('submit-btn');
 
     if (!contactForm) return;
 
-    // Calculer dynamiquement l'URL de redirection vers merci.html (même domaine)
-    const redirectField = document.getElementById('form-redirect');
-    if (redirectField) {
-        const currentUrl = window.location.href;
-        const baseUrl = currentUrl.split('?')[0].split('#')[0];
-        const basePath = baseUrl.substring(0, baseUrl.lastIndexOf('/') + 1);
-        redirectField.value = basePath + 'merci.html';
+    let formSubmitted = false;
+
+    // Détecter quand l'iframe charge (= Web3Forms a reçu le message)
+    if (contactIframe) {
+        contactIframe.addEventListener('load', function () {
+            if (!formSubmitted) return; // Ignorer le chargement initial de la page
+
+            // Le formulaire a été envoyé avec succès
+            formResult.textContent = "Merci ! Votre message a bien été envoyé. Je reviendrai vers vous dans moins de 24 heures.";
+            formResult.className = 'form-result success';
+            formResult.style.display = 'block';
+            contactForm.reset();
+
+            // Restaurer le bouton
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.querySelector('span').textContent = 'Envoyer le message';
+                submitBtn.querySelector('i').className = 'bx bx-send';
+            }
+
+            formSubmitted = false;
+        });
     }
 
     contactForm.addEventListener('submit', function (e) {
@@ -102,15 +119,39 @@ function initContactForm() {
         });
 
         if (missingFields.length > 0) {
-            e.preventDefault(); // Bloquer uniquement si la validation échoue
+            e.preventDefault();
             formResult.textContent = `Veuillez remplir les champs suivants : ${missingFields.join(', ')}.`;
             formResult.className = 'form-result error';
             formResult.style.display = 'block';
             return;
         }
 
-        // Si tout est valide, on laisse le formulaire se soumettre nativement (pas de preventDefault)
-        // Le navigateur enverra le POST vers https://api.web3forms.com/submit
+        // Validation OK : marquer comme soumis et afficher l'état de chargement
+        formSubmitted = true;
+        formResult.style.display = 'none';
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.querySelector('span').textContent = 'Envoi en cours...';
+            submitBtn.querySelector('i').className = 'bx bx-loader-alt bx-spin';
+        }
+
+        // Le formulaire se soumet nativement dans l'iframe (pas de preventDefault ici)
+        // Timeout de sécurité : si l'iframe ne charge pas en 15s, afficher quand même un message
+        setTimeout(function () {
+            if (formSubmitted) {
+                formResult.textContent = "Votre message a probablement été envoyé. Si vous ne recevez pas de réponse sous 24h, contactez-moi via LinkedIn.";
+                formResult.className = 'form-result success';
+                formResult.style.display = 'block';
+                formSubmitted = false;
+
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.querySelector('span').textContent = 'Envoyer le message';
+                    submitBtn.querySelector('i').className = 'bx bx-send';
+                }
+            }
+        }, 15000);
     });
 }
 
