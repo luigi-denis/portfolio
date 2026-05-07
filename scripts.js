@@ -122,6 +122,8 @@ function initContactForm() {
 
         // 2. Préparation de l'envoi
         const formData = new FormData(contactForm);
+        const object = Object.fromEntries(formData.entries());
+        const json = JSON.stringify(object);
         
         // Afficher le chargement
         submitBtn.disabled = true;
@@ -132,13 +134,19 @@ function initContactForm() {
         originalBtnIcon.className = 'bx bx-loader-alt bx-spin';
         formResult.style.display = 'none';
 
-        // 3. Envoi via Fetch (AJAX) pour une vraie vérification
+        // 3. Envoi via Fetch (JSON)
         fetch('https://api.web3forms.com/submit', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: json
         })
         .then(async response => {
             const data = await response.json();
+            console.log("Web3Forms Response:", data);
+            
             if (response.ok && data.success) {
                 // SUCCÈS RÉEL
                 formResult.textContent = "Merci ! Votre message a bien été envoyé. Je reviendrai vers vous dans moins de 24 heures.";
@@ -147,15 +155,15 @@ function initContactForm() {
                 playSuccessJingle();
                 formResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } else {
-                // ERREUR SERVEUR (Clé invalide, spam, etc.)
-                console.error("Erreur Web3Forms:", data);
+                // ERREUR SERVEUR
+                console.error("Erreur API:", data);
                 formResult.textContent = data.message || "Une erreur est survenue lors de l'envoi.";
                 formResult.className = 'form-result error';
             }
         })
         .catch(error => {
-            // ERREUR RÉSEAU (CORS, Connexion, CSP)
-            console.error("Erreur réseau ou sécurité:", error);
+            // ERREUR RÉSEAU / SÉCURITÉ
+            console.error("Erreur Fetch:", error);
             formResult.textContent = "Impossible d'envoyer le message. Vérifiez votre connexion ou la console.";
             formResult.className = 'form-result error';
         })
