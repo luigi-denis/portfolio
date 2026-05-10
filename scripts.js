@@ -59,22 +59,117 @@ const typed = new Typed('.multiple-text', {
 /* CONTACT FORM HANDLING (Web3Forms) */
 function initContactForm() {
     const contactForm = document.getElementById('contact-form');
+    const formResult = document.getElementById('form-result');
+    const submitBtn = document.getElementById('submit-btn');
+
     if (!contactForm) return;
 
-    // Injection dynamique de l'URL de redirection pour Web3Forms
-    // Cela permet au formulaire natif de rediriger vers merci.html après le succès
-    let redirectInput = contactForm.querySelector('input[name="redirect"]');
-    if (!redirectInput) {
-        redirectInput = document.createElement('input');
-        redirectInput.type = 'hidden';
-        redirectInput.name = 'redirect';
-        contactForm.appendChild(redirectInput);
+    // Jingle de confirmation (Web Audio API)
+    function playSuccessJingle() {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const notes = [
+                { freq: 523.25, start: 0, dur: 0.15 },
+                { freq: 659.25, start: 0.15, dur: 0.15 },
+                { freq: 783.99, start: 0.30, dur: 0.15 },
+                { freq: 1046.50, start: 0.45, dur: 0.30 }
+            ];
+            notes.forEach(n => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = n.freq;
+                gain.gain.setValueAtTime(0.15, ctx.currentTime + n.start);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + n.start + n.dur);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(ctx.currentTime + n.start);
+                osc.stop(ctx.currentTime + n.start + n.dur + 0.05);
+            });
+        } catch (e) { }
     }
-    
-    // Construction de l'URL absolue vers merci.html (nécessaire pour Web3Forms)
-    const currentUrl = window.location.href.split('#')[0].split('?')[0];
-    const baseUrl = currentUrl.endsWith('/') ? currentUrl : currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
-    redirectInput.value = baseUrl + 'merci.html';
+
+    contactForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // 1. Validation manuelle
+        const requiredFields = [
+            { name: 'nom', label: 'Nom' },
+            { name: 'prenom', label: 'Prénom' },
+            { name: 'email', label: 'Email' },
+            { name: 'objet', label: 'Objet' },
+            { name: 'message', label: 'Message' }
+        ];
+
+        let missingFields = [];
+        requiredFields.forEach(field => {
+            const input = contactForm.querySelector(`[name="${field.name}"]`);
+            if (!input || !input.value.trim()) {
+                missingFields.push(field.label);
+                if (input) {
+                    input.style.borderColor = "#e74c3c";
+                    input.addEventListener('input', () => input.style.borderColor = "", { once: true });
+                }
+            }
+        });
+
+        if (missingFields.length > 0) {
+            formResult.textContent = `Veuillez remplir les champs suivants : ${missingFields.join(', ')}.`;
+            formResult.className = 'form-result error';
+            formResult.style.display = 'block';
+            return;
+        }
+
+        // 2. Préparation de l'envoi (FormData natif pour éviter le CORS preflight OPTIONS)
+        const formData = new FormData(contactForm);
+        
+        // Afficher le chargement
+        submitBtn.disabled = true;
+        const originalBtnSpan = submitBtn.querySelector('span');
+        const originalBtnIcon = submitBtn.querySelector('i');
+        const originalBtnText = originalBtnSpan.textContent;
+        originalBtnSpan.textContent = 'Envoi en cours...';
+        originalBtnIcon.className = 'bx bx-loader-alt bx-spin';
+        formResult.style.display = 'none';
+
+        // 3. Envoi via Fetch
+        fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+        })
+        .then(async response => {
+            const data = await response.json();
+            console.log("Web3Forms Response:", data);
+            
+            if (response.ok && data.success) {
+                // SUCCÈS RÉEL (Vérifié par l'API)
+                formResult.textContent = "Merci ! Votre message a bien été envoyé. Je reviendrai vers vous dans moins de 24 heures.";
+                formResult.className = 'form-result success';
+                contactForm.reset();
+                playSuccessJingle();
+                formResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                // ERREUR SERVEUR (Clé invalide, spam, etc.)
+                console.error("Erreur API:", data);
+                formResult.textContent = "Erreur Web3Forms: " + (data.message || "Impossible d'envoyer.");
+                formResult.className = 'form-result error';
+                formResult.style.display = 'block';
+            }
+        })
+        .catch(error => {
+            // ERREUR RÉSEAU / CORS
+            console.error("Erreur Fetch:", error);
+            formResult.textContent = "Erreur réseau. Impossible de contacter le serveur Web3Forms.";
+            formResult.className = 'form-result error';
+            formResult.style.display = 'block';
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            originalBtnSpan.textContent = originalBtnText;
+            originalBtnIcon.className = 'bx bx-send';
+            formResult.style.display = 'block';
+        });
+    });
 }
 
 /* PROJECT MODAL LOGIC */
