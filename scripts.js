@@ -120,10 +120,8 @@ function initContactForm() {
             return;
         }
 
-        // 2. Préparation de l'envoi
+        // 2. Préparation de l'envoi (FormData natif pour éviter les erreurs CORS preflight 403)
         const formData = new FormData(contactForm);
-        const object = Object.fromEntries(formData.entries());
-        const json = JSON.stringify(object);
         
         // Afficher le chargement
         submitBtn.disabled = true;
@@ -134,26 +132,18 @@ function initContactForm() {
         originalBtnIcon.className = 'bx bx-loader-alt bx-spin';
         formResult.style.display = 'none';
 
-        // 3. Envoi via Fetch (JSON)
+        // 3. Envoi via Fetch
         fetch('https://api.web3forms.com/submit', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: json
+            body: formData
         })
         .then(async response => {
             const data = await response.json();
             console.log("Web3Forms Response:", data);
             
             if (response.ok && data.success) {
-                // SUCCÈS RÉEL
-                formResult.textContent = "Merci ! Votre message a bien été envoyé. Je reviendrai vers vous dans moins de 24 heures.";
-                formResult.className = 'form-result success';
-                contactForm.reset();
-                playSuccessJingle();
-                formResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // SUCCÈS RÉEL - Redirection vers la page de remerciement
+                window.location.href = "merci.html";
             } else {
                 // ERREUR SERVEUR
                 console.error("Erreur API:", data);
